@@ -1,0 +1,47 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SCH Realtor App</title>
+
+  <!-- PWA Meta -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+  <style>
+    body {
+      font-family: Calibri, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: bold;
+    }
+    input {
+      padding: 10px;
+      font-size: 18px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Welcome to SCH Realtor App</h1>
+  <input id="textInput" type="text" placeholder="Type something" />
+  <button onclick="convert()">Submit</button>
+
+  <script>
+    function convert() {
+      const text = document.getElementById("textInput").value;
+      document.getElementById("title").innerText = text;
+    }
+  </script>
+</body>
+</html>
