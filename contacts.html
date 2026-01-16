@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact App</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input { margin: 5px 0; padding: 5px; width: 200px; }
+    button { margin: 5px 0; padding: 8px 12px; }
+    #contactsOutput p { margin: 3px 0; border-bottom: 1px solid #ddd; padding-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+  <h2>Contact Form</h2>
+
+  <!-- Inputs -->
+  <input id="fnameInput" type="text" placeholder="First name"><br>
+  <input id="lnameInput" type="text" placeholder="Last name"><br>
+  <input id="addressInput" type="text" placeholder="Address"><br>
+  <input id="phoneInput" type="text" placeholder="Phone number"><br>
+  <input id="emailInput" type="text" placeholder="Email"><br>
+
+  <button onclick="saveContact()">Save Contact</button>
+  <button onclick="exportContacts()">Export All Contacts</button>
+
+  <h2>Saved Contacts</h2>
+  <div id="contactsOutput"></div>
+
+  <script>
+    let db;
+
+    // --- Step 1: Open IndexedDB ---
+    function openDB() {
+      const request = indexedDB.open("ContactsDB", 1);
+
+      request.onupgradeneeded = function(event) {
+        db = event.target.result;
+        db.createObjectStore("contacts", { keyPath: "id", autoIncrement: true });
+      };
+
+      request.onsuccess = function(event) {
+        db = event.target.result;
+        displayContacts();
+      };
+
+      request.onerror = function(event) {
+        console.error("Database error: " + event.target.errorCode);
+      };
+    }
+
+    openDB(); // open DB on page load
+
+    // --- Step 2: Save a new contact ---
+    function saveContact() {
+      const fname = document.getElementById("fnameInput").value.trim();
+      const lname = document.getElementById("lnameInput").value.trim();
+      const address = document.getElementById("addressInput").value.trim();
+      const phone = document.getElementById("phoneInput").value.trim();
+      const email = document.getElementById("emailInput").value.trim();
+
+      if (!fname && !lname) {
+        alert("Please enter at least a first or last name.");
+        return;
+      }
+
+      const tx = db.transaction("contacts", "readwrite");
+      const store = tx.objectStore("contacts");
+      store.add({ fname, lname, address, phone, email });
+
+      tx.oncomplete = () => {
+        console.log("Contact saved!");
+        clearForm();
+        displayContacts();
+      };
+
+      tx.onerror = (e) => console.error("Error saving contact", e.target.error);
+    }
+
+    // --- Step 3: Display all saved contacts ---
+    function displayContacts() {
+      const output = document.getElementById("contactsOutput");
+      output.innerHTML = "";
+
+      const tx = db.transaction("contacts", "readonly");
+      const store = tx.objectStore("contacts");
+
+      store.openCursor().onsuccess = function(event) {
+        const cursor = event.target.result;
+        if (cursor) {
+          const c = cursor.value;
+          output.innerHTML += `
+            <p>
+              <strong>ID:</strong> ${c.id} |
+              <strong>Name:</strong> ${c.fname} ${c.lname} |
+              <strong>Address:</strong> ${c.address} |
+              <strong>Phone:</strong> ${c.phone} |
+              <strong>Email:</strong> ${c.email}
+            </p>
+          `;
+          cursor.continue();
+        }
+      };
+    }
+
+    // --- Step 4: Clear input form ---
+    function clearForm() {
+      document.getElementById("fnameInput").value = "";
+      document.getElementById("lnameInput").value = "";
+      document.getElementById("addressInput").value = "";
+      document.getElementById("phoneInput").value = "";
+      document.getElementById("emailInput").value = "";
+    }
+
+    // --- Step 5: Export all contacts to text file ---
+    function exportContacts() {
+      const tx = db.transaction("contacts", "readonly");
+      const store = tx.objectStore("contacts");
+      const allContacts = [];
+
+      store.openCursor().onsuccess = function(event) {
+        const cursor = event.target.result;
+        if (cursor) {
+          const c = cursor.value;
+          allContacts.push(
+`ID: ${c.id}
+Name: ${c.fname} ${c.lname}
+Address: ${c.address}
+Phone: ${c.phone}
+Email: ${c.email}
+-------------------------`
+          );
+          cursor.continue();
+        } else {
+          // All contacts collected, now download
+          const blob = new Blob([allContacts.join("\n")], { type: "text/plain" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "contacts.txt";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      };
+    }
+  </script>
+
+</body>
+</html>
