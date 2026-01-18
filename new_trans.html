@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +39,6 @@
   }
 </style>
 </head>
-
 <body>
 
 <h3>Client Info</h3>
@@ -62,15 +61,14 @@
 
 <br>
 
-<button onclick="saveData()">Save</button>
-<button onclick="viewData()">View Saved Data</button>
+<button id="saveBtn">Save Data</button>
+<button id="viewBtn">View Saved Data</button>
 
 <p id="message"></p>
 
 <div id="view" class="view-box"></div>
 
 <script>
-// Your list of tasks
 const tasks = [
   "mandatory licenses consumer",
   "MA-Exc buyers agency agreement",
@@ -91,35 +89,47 @@ const tasks = [
 ];
 
 const taskBody = document.getElementById("tasks");
-
-// Load saved data on page load
 const saved = JSON.parse(localStorage.getItem("formData")) || { tasks: {} };
 
+// Populate tasks table
 tasks.forEach(task => {
   const status = saved.tasks[task] || "Not Completed";
+  const tr = document.createElement("tr");
 
-  taskBody.innerHTML += `
-    <tr>
-      <td>${task}</td>
-      <td>
-        <select>
-          <option ${status==="Not Completed" ? "selected" : ""}>Not Completed</option>
-          <option ${status==="Completed" ? "selected" : ""}>Completed</option>
-        </select>
-      </td>
-    </tr>
-  `;
+  const tdTask = document.createElement("td");
+  tdTask.textContent = task;
+
+  const tdSelect = document.createElement("td");
+  const select = document.createElement("select");
+  const option1 = document.createElement("option");
+  option1.value = "Not Completed";
+  option1.text = "Not Completed";
+  const option2 = document.createElement("option");
+  option2.value = "Completed";
+  option2.text = "Completed";
+
+  select.add(option1);
+  select.add(option2);
+
+  select.value = status;
+
+  tdSelect.appendChild(select);
+
+  tr.appendChild(tdTask);
+  tr.appendChild(tdSelect);
+
+  taskBody.appendChild(tr);
 });
 
-// Load client info
+// Populate input fields
 document.getElementById("fname").value = saved.fname || "";
 document.getElementById("lname").value = saved.lname || "";
 document.getElementById("address").value = saved.address || "";
 document.getElementById("phone").value = saved.phone || "";
 document.getElementById("email").value = saved.email || "";
 
-// Save button function
-function saveData() {
+// Save button
+document.getElementById("saveBtn").addEventListener("click", () => {
   const data = {
     fname: document.getElementById("fname").value,
     lname: document.getElementById("lname").value,
@@ -129,40 +139,37 @@ function saveData() {
     tasks: {}
   };
 
-  // Save task statuses
-  document.querySelectorAll("tbody tr").forEach(row => {
-    const task = row.children[0].innerText;
+  document.querySelectorAll("#tasks tr").forEach(row => {
+    const task = row.children[0].textContent;
     const status = row.children[1].children[0].value;
     data.tasks[task] = status;
   });
 
   localStorage.setItem("formData", JSON.stringify(data));
   document.getElementById("message").innerText = "Saved ✔";
-}
+});
 
-// View button function
-function viewData() {
+// View button
+document.getElementById("viewBtn").addEventListener("click", () => {
   const data = JSON.parse(localStorage.getItem("formData"));
   if (!data) {
     document.getElementById("view").innerText = "No saved data found";
     return;
   }
 
-  let html = `
-    <strong>Client Info</strong><br>
-    Name: ${data.fname} ${data.lname}<br>
-    Address: ${data.address}<br>
-    Phone: ${data.phone}<br>
-    Email: ${data.email}<br><br>
-    <strong>Tasks</strong><br>
-  `;
+  let html = `<strong>Client Info</strong><br>
+              Name: ${data.fname} ${data.lname}<br>
+              Address: ${data.address}<br>
+              Phone: ${data.phone}<br>
+              Email: ${data.email}<br><br>
+              <strong>Tasks</strong><br>`;
 
   for (let task in data.tasks) {
     html += `${task}: ${data.tasks[task]}<br>`;
   }
 
   document.getElementById("view").innerHTML = html;
-}
+});
 </script>
 
 </body>
