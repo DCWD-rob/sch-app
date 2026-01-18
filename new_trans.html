@@ -1,8 +1,7 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
   body {
     font-family: Arial;
@@ -71,6 +70,7 @@
 <div id="view" class="view-box"></div>
 
 <script>
+// Your list of tasks
 const tasks = [
   "mandatory licenses consumer",
   "MA-Exc buyers agency agreement",
@@ -93,10 +93,10 @@ const tasks = [
 const taskBody = document.getElementById("tasks");
 
 // Load saved data on page load
-const saved = JSON.parse(localStorage.getItem("formData")) || {};
+const saved = JSON.parse(localStorage.getItem("formData")) || { tasks: {} };
 
 tasks.forEach(task => {
-  const status = saved.tasks?.[task] || "Not Completed";
+  const status = saved.tasks[task] || "Not Completed";
 
   taskBody.innerHTML += `
     <tr>
@@ -111,23 +111,25 @@ tasks.forEach(task => {
   `;
 });
 
-// Load inputs
-fname.value = saved.fname || "";
-lname.value = saved.lname || "";
-address.value = saved.address || "";
-phone.value = saved.phone || "";
-email.value = saved.email || "";
+// Load client info
+document.getElementById("fname").value = saved.fname || "";
+document.getElementById("lname").value = saved.lname || "";
+document.getElementById("address").value = saved.address || "";
+document.getElementById("phone").value = saved.phone || "";
+document.getElementById("email").value = saved.email || "";
 
+// Save button function
 function saveData() {
   const data = {
-    fname: fname.value,
-    lname: lname.value,
-    address: address.value,
-    phone: phone.value,
-    email: email.value,
+    fname: document.getElementById("fname").value,
+    lname: document.getElementById("lname").value,
+    address: document.getElementById("address").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
     tasks: {}
   };
 
+  // Save task statuses
   document.querySelectorAll("tbody tr").forEach(row => {
     const task = row.children[0].innerText;
     const status = row.children[1].children[0].value;
@@ -135,13 +137,14 @@ function saveData() {
   });
 
   localStorage.setItem("formData", JSON.stringify(data));
-  message.innerText = "Saved ✔";
+  document.getElementById("message").innerText = "Saved ✔";
 }
 
+// View button function
 function viewData() {
   const data = JSON.parse(localStorage.getItem("formData"));
   if (!data) {
-    view.innerText = "No saved data found";
+    document.getElementById("view").innerText = "No saved data found";
     return;
   }
 
@@ -158,7 +161,7 @@ function viewData() {
     html += `${task}: ${data.tasks[task]}<br>`;
   }
 
-  view.innerHTML = html;
+  document.getElementById("view").innerHTML = html;
 }
 </script>
 
