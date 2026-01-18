@@ -1,9 +1,9 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real Estate Tasks</title>
+<title>Real Estate Tasks - Multi Job</title>
 <style>
   body {
     font-family: Arial;
@@ -43,18 +43,15 @@
     border: none;
     margin-top: 10px;
   }
-
-  .view-box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 15px;
-    background: #fff;
-  }
 </style>
 </head>
 <body>
 
-<h2>Client Info & Tasks</h2>
+<h2>Real Estate Tasks - Multi Job</h2>
+
+<label for="jobSelect"><strong>Select Job / Client</strong></label>
+<select id="jobSelect"></select>
+<button id="newJobBtn">New Job</button>
 
 <h3>Client Info</h3>
 <input id="fname" placeholder="First name">
@@ -96,49 +93,66 @@ const tasksList = [
 ];
 
 const tasksBody = document.getElementById("tasks");
+const jobSelect = document.getElementById("jobSelect");
+const newJobBtn = document.getElementById("newJobBtn");
 
-// Load saved data or start fresh
-const savedData = JSON.parse(localStorage.getItem("formData")) || { tasks: {} };
+let allJobs = JSON.parse(localStorage.getItem("allJobs")) || {};
+let currentJob = null;
 
-// Populate inputs
-document.getElementById("fname").value = savedData.fname || "";
-document.getElementById("lname").value = savedData.lname || "";
-document.getElementById("address").value = savedData.address || "";
-document.getElementById("phone").value = savedData.phone || "";
-document.getElementById("email").value = savedData.email || "";
+// Populate job selector
+function populateJobSelector() {
+  jobSelect.innerHTML = "";
+  Object.keys(allJobs).forEach(jobName => {
+    const option = document.createElement("option");
+    option.value = jobName;
+    option.text = jobName;
+    jobSelect.add(option);
+  });
+}
 
-// Populate task table
-tasksList.forEach(task => {
-  const status = savedData.tasks[task] || "Not Completed";
+// Load job data
+function loadJob(jobName) {
+  currentJob = jobName;
+  const data = allJobs[jobName] || { tasks: {} };
 
-  const tr = document.createElement("tr");
+  document.getElementById("fname").value = data.fname || "";
+  document.getElementById("lname").value = data.lname || "";
+  document.getElementById("address").value = data.address || "";
+  document.getElementById("phone").value = data.phone || "";
+  document.getElementById("email").value = data.email || "";
 
-  const tdTask = document.createElement("td");
-  tdTask.textContent = task;
+  // Populate tasks
+  tasksBody.innerHTML = "";
+  tasksList.forEach(task => {
+    const status = data.tasks[task] || "Not Completed";
 
-  const tdSelect = document.createElement("td");
-  const select = document.createElement("select");
+    const tr = document.createElement("tr");
+    const tdTask = document.createElement("td");
+    tdTask.textContent = task;
 
-  const option1 = document.createElement("option");
-  option1.value = "Not Completed";
-  option1.text = "Not Completed";
-  const option2 = document.createElement("option");
-  option2.value = "Completed";
-  option2.text = "Completed";
+    const tdSelect = document.createElement("td");
+    const select = document.createElement("select");
 
-  select.add(option1);
-  select.add(option2);
-  select.value = status;
+    ["Not Completed", "Completed"].forEach(val => {
+      const option = document.createElement("option");
+      option.value = val;
+      option.text = val;
+      select.add(option);
+    });
+    select.value = status;
 
-  tdSelect.appendChild(select);
-  tr.appendChild(tdTask);
-  tr.appendChild(tdSelect);
+    tdSelect.appendChild(select);
+    tr.appendChild(tdTask);
+    tr.appendChild(tdSelect);
 
-  tasksBody.appendChild(tr);
-});
+    tasksBody.appendChild(tr);
+  });
+}
 
-// Save button
-document.getElementById("saveBtn").addEventListener("click", () => {
+// Save current job
+function saveCurrentJob() {
+  if (!currentJob) return;
+
   const dataToSave = {
     fname: document.getElementById("fname").value,
     lname: document.getElementById("lname").value,
@@ -154,14 +168,42 @@ document.getElementById("saveBtn").addEventListener("click", () => {
     dataToSave.tasks[task] = status;
   });
 
-  try {
-    localStorage.setItem("formData", JSON.stringify(dataToSave));
-    document.getElementById("message").innerText = "Saved ✔";
-  } catch(e) {
-    console.error(e);
-    document.getElementById("message").innerText = "Cannot save: make sure app is loaded from GitHub Pages or HTTPS origin.";
-  }
+  allJobs[currentJob] = dataToSave;
+  localStorage.setItem("allJobs", JSON.stringify(allJobs));
+  document.getElementById("message").innerText = "Saved ✔";
+}
+
+// Event: job selection change
+jobSelect.addEventListener("change", () => {
+  loadJob(jobSelect.value);
+  document.getElementById("message").innerText = "";
 });
+
+// Event: New Job
+newJobBtn.addEventListener("click", () => {
+  const newJobName = prompt("Enter new job/client name:");
+  if (!newJobName) return;
+  if (allJobs[newJobName]) {
+    alert("Job already exists!");
+    return;
+  }
+  allJobs[newJobName] = { tasks: {} };
+  localStorage.setItem("allJobs", JSON.stringify(allJobs));
+  populateJobSelector();
+  jobSelect.value = newJobName;
+  loadJob(newJobName);
+});
+
+// Event: Save button
+document.getElementById("saveBtn").addEventListener("click", saveCurrentJob);
+
+// Initialize
+populateJobSelector();
+if (Object.keys(allJobs).length > 0) {
+  const firstJob = Object.keys(allJobs)[0];
+  jobSelect.value = firstJob;
+  loadJob(firstJob);
+}
 </script>
 
 </body>
