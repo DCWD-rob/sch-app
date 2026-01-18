@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -56,7 +56,6 @@
 
 <h2>Client Info & Tasks</h2>
 
-<!-- Client Inputs -->
 <h3>Client Info</h3>
 <input id="fname" placeholder="First name">
 <input id="lname" placeholder="Last name">
@@ -64,7 +63,6 @@
 <input id="phone" placeholder="Phone">
 <input id="email" placeholder="Email">
 
-<!-- Task List -->
 <h3>Tasks</h3>
 <table>
   <tr>
@@ -74,17 +72,11 @@
   <tbody id="tasks"></tbody>
 </table>
 
-<!-- Buttons -->
 <button id="saveBtn">Save Data</button>
-<button id="viewBtn">View Saved Data</button>
-
 <p id="message"></p>
 
-<div id="view" class="view-box"></div>
-
 <script>
-// List of tasks
-const tasks = [
+const tasksList = [
   "mandatory licenses consumer",
   "MA-Exc buyers agency agreement",
   "TRID addendum",
@@ -103,14 +95,21 @@ const tasks = [
   "DA"
 ];
 
-const taskBody = document.getElementById("tasks");
+const tasksBody = document.getElementById("tasks");
 
-// Load saved data on page load
-const saved = JSON.parse(localStorage.getItem("formData")) || { tasks: {} };
+// Load saved data or start fresh
+const savedData = JSON.parse(localStorage.getItem("formData")) || { tasks: {} };
 
-// Populate tasks table
-tasks.forEach(task => {
-  const status = saved.tasks[task] || "Not Completed";
+// Populate inputs
+document.getElementById("fname").value = savedData.fname || "";
+document.getElementById("lname").value = savedData.lname || "";
+document.getElementById("address").value = savedData.address || "";
+document.getElementById("phone").value = savedData.phone || "";
+document.getElementById("email").value = savedData.email || "";
+
+// Populate task table
+tasksList.forEach(task => {
+  const status = savedData.tasks[task] || "Not Completed";
 
   const tr = document.createElement("tr");
 
@@ -135,19 +134,12 @@ tasks.forEach(task => {
   tr.appendChild(tdTask);
   tr.appendChild(tdSelect);
 
-  taskBody.appendChild(tr);
+  tasksBody.appendChild(tr);
 });
-
-// Load client info inputs
-document.getElementById("fname").value = saved.fname || "";
-document.getElementById("lname").value = saved.lname || "";
-document.getElementById("address").value = saved.address || "";
-document.getElementById("phone").value = saved.phone || "";
-document.getElementById("email").value = saved.email || "";
 
 // Save button
 document.getElementById("saveBtn").addEventListener("click", () => {
-  const data = {
+  const dataToSave = {
     fname: document.getElementById("fname").value,
     lname: document.getElementById("lname").value,
     address: document.getElementById("address").value,
@@ -159,38 +151,16 @@ document.getElementById("saveBtn").addEventListener("click", () => {
   document.querySelectorAll("#tasks tr").forEach(row => {
     const task = row.children[0].textContent;
     const status = row.children[1].children[0].value;
-    data.tasks[task] = status;
+    dataToSave.tasks[task] = status;
   });
 
   try {
-    localStorage.setItem("formData", JSON.stringify(data));
+    localStorage.setItem("formData", JSON.stringify(dataToSave));
     document.getElementById("message").innerText = "Saved ✔";
-  } catch (e) {
-    document.getElementById("message").innerText = "Error saving data. Make sure app is opened via HTTPS/GitHub Pages.";
+  } catch(e) {
     console.error(e);
+    document.getElementById("message").innerText = "Cannot save: make sure app is loaded from GitHub Pages or HTTPS origin.";
   }
-});
-
-// View button
-document.getElementById("viewBtn").addEventListener("click", () => {
-  const data = JSON.parse(localStorage.getItem("formData"));
-  if (!data) {
-    document.getElementById("view").innerText = "No saved data found";
-    return;
-  }
-
-  let html = `<strong>Client Info</strong><br>
-              Name: ${data.fname} ${data.lname}<br>
-              Address: ${data.address}<br>
-              Phone: ${data.phone}<br>
-              Email: ${data.email}<br><br>
-              <strong>Tasks</strong><br>`;
-
-  for (let task in data.tasks) {
-    html += `${task}: ${data.tasks[task]}<br>`;
-  }
-
-  document.getElementById("view").innerHTML = html;
 });
 </script>
 
