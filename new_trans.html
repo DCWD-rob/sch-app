@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real Estate Tasks</title>
 <style>
   body {
     font-family: Arial;
     padding: 10px;
+    background: #f8f8f8;
+  }
+
+  h3 {
+    margin-top: 20px;
   }
 
   input, select, button {
@@ -13,44 +20,52 @@
     padding: 10px;
     margin: 6px 0;
     font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 10px;
+    background: #fff;
   }
 
   td, th {
     border: 1px solid #ccc;
     padding: 8px;
+    text-align: left;
   }
 
   button {
-    background: green;
+    background: #28a745;
     color: white;
     border: none;
-    border-radius: 5px;
+    margin-top: 10px;
   }
 
   .view-box {
     border: 1px solid #ccc;
     padding: 10px;
     margin-top: 15px;
+    background: #fff;
   }
 </style>
 </head>
 <body>
 
-<h3>Client Info</h3>
+<h2>Client Info & Tasks</h2>
 
+<!-- Client Inputs -->
+<h3>Client Info</h3>
 <input id="fname" placeholder="First name">
 <input id="lname" placeholder="Last name">
 <input id="address" placeholder="Address">
 <input id="phone" placeholder="Phone">
 <input id="email" placeholder="Email">
 
+<!-- Task List -->
 <h3>Tasks</h3>
-
 <table>
   <tr>
     <th>Task</th>
@@ -59,8 +74,7 @@
   <tbody id="tasks"></tbody>
 </table>
 
-<br>
-
+<!-- Buttons -->
 <button id="saveBtn">Save Data</button>
 <button id="viewBtn">View Saved Data</button>
 
@@ -69,6 +83,7 @@
 <div id="view" class="view-box"></div>
 
 <script>
+// List of tasks
 const tasks = [
   "mandatory licenses consumer",
   "MA-Exc buyers agency agreement",
@@ -89,11 +104,14 @@ const tasks = [
 ];
 
 const taskBody = document.getElementById("tasks");
+
+// Load saved data on page load
 const saved = JSON.parse(localStorage.getItem("formData")) || { tasks: {} };
 
 // Populate tasks table
 tasks.forEach(task => {
   const status = saved.tasks[task] || "Not Completed";
+
   const tr = document.createElement("tr");
 
   const tdTask = document.createElement("td");
@@ -101,6 +119,7 @@ tasks.forEach(task => {
 
   const tdSelect = document.createElement("td");
   const select = document.createElement("select");
+
   const option1 = document.createElement("option");
   option1.value = "Not Completed";
   option1.text = "Not Completed";
@@ -110,18 +129,16 @@ tasks.forEach(task => {
 
   select.add(option1);
   select.add(option2);
-
   select.value = status;
 
   tdSelect.appendChild(select);
-
   tr.appendChild(tdTask);
   tr.appendChild(tdSelect);
 
   taskBody.appendChild(tr);
 });
 
-// Populate input fields
+// Load client info inputs
 document.getElementById("fname").value = saved.fname || "";
 document.getElementById("lname").value = saved.lname || "";
 document.getElementById("address").value = saved.address || "";
@@ -145,8 +162,13 @@ document.getElementById("saveBtn").addEventListener("click", () => {
     data.tasks[task] = status;
   });
 
-  localStorage.setItem("formData", JSON.stringify(data));
-  document.getElementById("message").innerText = "Saved ✔";
+  try {
+    localStorage.setItem("formData", JSON.stringify(data));
+    document.getElementById("message").innerText = "Saved ✔";
+  } catch (e) {
+    document.getElementById("message").innerText = "Error saving data. Make sure app is opened via HTTPS/GitHub Pages.";
+    console.error(e);
+  }
 });
 
 // View button
