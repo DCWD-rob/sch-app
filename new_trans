@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  body {
+    font-family: Arial;
+    padding: 10px;
+  }
+
+  input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    font-size: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  td, th {
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+
+  button {
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .view-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 15px;
+  }
+</style>
+</head>
+
+<body>
+
+<h3>Client Info</h3>
+
+<input id="fname" placeholder="First name">
+<input id="lname" placeholder="Last name">
+<input id="address" placeholder="Address">
+<input id="phone" placeholder="Phone">
+<input id="email" placeholder="Email">
+
+<h3>Tasks</h3>
+
+<table>
+  <tr>
+    <th>Task</th>
+    <th>Status</th>
+  </tr>
+  <tbody id="tasks"></tbody>
+</table>
+
+<br>
+
+<button onclick="saveData()">Save</button>
+<button onclick="viewData()">View Saved Data</button>
+
+<p id="message"></p>
+
+<div id="view" class="view-box"></div>
+
+<script>
+const tasks = [
+  "mandatory licenses consumer",
+  "MA-Exc buyers agency agreement",
+  "TRID addendum",
+  "lender approval",
+  "deed",
+  "MLS Listing",
+  "contract to purchase Real estate",
+  "offer deposit",
+  "lead paint notice",
+  "MA standard P and S agreement",
+  "P and S deposit",
+  "MA notice of designated agency",
+  "facts for consumers",
+  "sellers real estate info statement",
+  "closing documents",
+  "DA"
+];
+
+const taskBody = document.getElementById("tasks");
+
+// Load saved data on page load
+const saved = JSON.parse(localStorage.getItem("formData")) || {};
+
+tasks.forEach(task => {
+  const status = saved.tasks?.[task] || "Not Completed";
+
+  taskBody.innerHTML += `
+    <tr>
+      <td>${task}</td>
+      <td>
+        <select>
+          <option ${status==="Not Completed" ? "selected" : ""}>Not Completed</option>
+          <option ${status==="Completed" ? "selected" : ""}>Completed</option>
+        </select>
+      </td>
+    </tr>
+  `;
+});
+
+// Load inputs
+fname.value = saved.fname || "";
+lname.value = saved.lname || "";
+address.value = saved.address || "";
+phone.value = saved.phone || "";
+email.value = saved.email || "";
+
+function saveData() {
+  const data = {
+    fname: fname.value,
+    lname: lname.value,
+    address: address.value,
+    phone: phone.value,
+    email: email.value,
+    tasks: {}
+  };
+
+  document.querySelectorAll("tbody tr").forEach(row => {
+    const task = row.children[0].innerText;
+    const status = row.children[1].children[0].value;
+    data.tasks[task] = status;
+  });
+
+  localStorage.setItem("formData", JSON.stringify(data));
+  message.innerText = "Saved ✔";
+}
+
+function viewData() {
+  const data = JSON.parse(localStorage.getItem("formData"));
+  if (!data) {
+    view.innerText = "No saved data found";
+    return;
+  }
+
+  let html = `
+    <strong>Client Info</strong><br>
+    Name: ${data.fname} ${data.lname}<br>
+    Address: ${data.address}<br>
+    Phone: ${data.phone}<br>
+    Email: ${data.email}<br><br>
+    <strong>Tasks</strong><br>
+  `;
+
+  for (let task in data.tasks) {
+    html += `${task}: ${data.tasks[task]}<br>`;
+  }
+
+  view.innerHTML = html;
+}
+</script>
+
+</body>
+</html>
