@@ -1,8 +1,8 @@
 body {
-    background-color: rgb(107, 77, 189);
-}
 
-h1 {
+  background-image: linear-gradient(to bottom right, rgb(107, 77, 189), rgb(124, 53, 118));
+}
+h1, h2 {
     text-align: center;
 }
 
@@ -32,6 +32,7 @@ h1 {
 #OH_div {
     background: rgb(66, 21, 59);
     width: 75%;
+    background-color: rgb(107, 77, 189);
     text-align: center;
     display: flex;
     justify-content: center;
@@ -45,7 +46,7 @@ h1 {
     border: 1px solid black;
     border-radius: 10px;
     padding: 20px;
-    background: rgb(66, 21, 59);
+    background: rgb(107, 77, 189);
 }
 
 /* Buttons */
@@ -53,7 +54,7 @@ h1 {
     width: 300px;
     padding: 12px;
     margin-top: 10px;
-    background: #0078ff;
+    background: rgb(86, 79, 105);;
     color: white;
     border: none;
     border-radius: 6px;
@@ -63,7 +64,7 @@ h1 {
 }
 
 #contactForm button:hover {
-    background: #005fcc;
+    background: rgb(107, 77, 189);
 }
 
 /* HEADER BOXES (4 small boxes) */
@@ -80,14 +81,14 @@ h1 {
     justify-content: center;
     align-items: center;
     height: 75px;
-    border: 3px solid #333;
+    border: 1px solid #030303;
     border-radius: 10px;
     font-size: 15px;
     font-weight: bold;
     text-decoration: none;
     color: black;
     transition: 0.2s;
-    background: rgb(66, 21, 59);
+    background: rgb(107, 77, 189);;
     width:100px;
 }
 
@@ -107,23 +108,28 @@ h1 {
 
 /* Large clickable boxes */
 .box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex;              /* make it a flex container */
+    justify-content: center;    /* center image horizontally */
+    align-items: center;        /* center image vertically */
     height: 250px;
-    border: 3px solid #333;
+    border: 3px solid #1c011d;
     border-radius: 10px;
     font-size: 20px;
     font-weight: bold;
     text-decoration: none;
     color: black;
     transition: 0.2s;
+    overflow: hidden;
 }
 
+
+
 .box:hover {
-    background: #e0e0e0;
+    background: rgb(107, 77, 189);
     cursor: pointer;
 }
+
+
 #fdname{
     text-align: center;
 }
