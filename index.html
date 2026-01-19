@@ -1,150 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contacts App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacey Curran Homes</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacey Curran Homes</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h2>Contact Form</h2>
-<a href="new_trans.html">new transaction</a>
-  <!-- Input fields -->
-  <input id="fnameInput" type="text" placeholder="First name"><br>
-  <input id="lnameInput" type="text" placeholder="Last name"><br>
-  <input id="addressInput" type="text" placeholder="Address"><br>
-  <input id="phoneInput" type="text" placeholder="Phone number"><br>
-  <input id="emailInput" type="text" placeholder="Email"><br>
+    <div class="container">
+    <a href="index.html" class="box">home</a>
+    <a href="contact.html" class="box">contacts</a>
+    <a href="agent_sales.html" class="box">sales</a>
+    <a href="open_house.html" class="box">open house</a>
+</div>
 
-  <!-- Buttons -->
-  <button onclick="saveContact()">Save Contact</button>
-  <button onclick="showAllContacts()">Show All Contacts</button>
-  <button onclick="downloadContacts()">Download Contacts</button>
-
-  <h3>Saved Contacts:</h3>
-  <div id="contactsList"></div>
-
-  <script>
-    let db;
-
-    // Initialize IndexedDB
-    const request = indexedDB.open("ContactsDB", 1);
-
-    request.onupgradeneeded = function(event) {
-      db = event.target.result;
-      const store = db.createObjectStore("contacts", { keyPath: "id", autoIncrement: true });
-    };
-
-    request.onsuccess = function(event) {
-      db = event.target.result;
-      console.log("Database initialized");
-    };
-
-    request.onerror = function(event) {
-      console.error("Database error:", event.target.errorCode);
-    };
-
-    // Save contact to IndexedDB
-    function saveContact() {
-      const fname = document.getElementById("fnameInput").value.trim();
-      const lname = document.getElementById("lnameInput").value.trim();
-      const address = document.getElementById("addressInput").value.trim();
-      const phone = document.getElementById("phoneInput").value.trim();
-      const email = document.getElementById("emailInput").value.trim();
-
-      if (!fname && !lname) {
-        alert("Please enter at least a first or last name.");
-        return;
-      }
-
-      const tx = db.transaction(["contacts"], "readwrite");
-      const store = tx.objectStore("contacts");
-      store.add({ fname, lname, address, phone, email });
-
-      tx.oncomplete = function() {
-        alert("Contact saved!");
-        clearForm();
-      };
-
-      tx.onerror = function(event) {
-        console.error("Transaction error:", event.target.error);
-      };
-    }
-
-    // Show all contacts
-    function showAllContacts() {
-      const contactsDiv = document.getElementById("contactsList");
-      contactsDiv.innerHTML = "";
-
-      const tx = db.transaction(["contacts"], "readonly");
-      const store = tx.objectStore("contacts");
-
-      store.openCursor().onsuccess = function(event) {
-        const cursor = event.target.result;
-        if (cursor) {
-          const c = cursor.value;
-          const contactHTML = `
-            <p>
-              <strong>${c.fname} ${c.lname}</strong><br>
-              Address: ${c.address}<br>
-              Phone: ${c.phone}<br>
-              Email: ${c.email}
-            </p>
-            <hr>
-          `;
-          contactsDiv.innerHTML += contactHTML;
-          cursor.continue();
-        } else if (!contactsDiv.innerHTML) {
-          contactsDiv.innerHTML = "<p>No contacts saved yet.</p>";
-        }
-      };
-    }
-
-    // Download all contacts as TXT
-    function downloadContacts() {
-      const tx = db.transaction(["contacts"], "readonly");
-      const store = tx.objectStore("contacts");
-      const allContacts = [];
-
-      store.openCursor().onsuccess = function(event) {
-        const cursor = event.target.result;
-        if (cursor) {
-          const c = cursor.value;
-          allContacts.push(
-`ID: ${c.id}
-Name: ${c.fname} ${c.lname}
-Address: ${c.address}
-Phone: ${c.phone}
-Email: ${c.email}
--------------------------`
-          );
-          cursor.continue();
-        } else {
-          if (allContacts.length === 0) {
-            alert("No contacts to download!");
-            return;
-          }
-          const blob = new Blob([allContacts.join("\n")], { type: "text/plain" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "contacts.txt";
-          a.click();
-          URL.revokeObjectURL(url);
-        }
-      };
-    }
-
-    // Clear input form
-    function clearForm() {
-      document.getElementById("fnameInput").value = "";
-      document.getElementById("lnameInput").value = "";
-      document.getElementById("addressInput").value = "";
-      document.getElementById("phoneInput").value = "";
-      document.getElementById("emailInput").value = "";
-    }
-  </script>
 
 </body>
 </html>
 
+    
+</body>
+</html>

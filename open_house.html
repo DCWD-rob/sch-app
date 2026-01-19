@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCH Sign IN</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+     <header>
+        <div class="header">
+    <a href="index.html" class="headerbox">home</a>
+    <a href="contact.html" class="headerbox">contacts</a>
+    <a href="agent_sales.html" class="headerbox">sales</a>
+    <a href="open_house.html" class="headerbox">open house</a>
+</div>
+
+    </header>
+    <h1>Stacey Curran Homes</h1>
+    <h1>Open House Sign In Sheet</h1>
+
+    <div id="openHouse">
+        <div id="OH_div">
+            <form id="signInForm">
+                <label for="fname">First name:</label><br>
+                <input type="text" id="fname" name="fname"><br>
+
+                <label for="email">Email:</label><br>
+                <input type="text" id="email" name="email"><br><br>
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+          <p id="fdname"></p>
+    </div>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<script>
+  emailjs.init("0QvLx2yuvBvzkzWlG");
+</script>
+
+<script src="open_house.js"></script>
+
+
+
+
+
+</body>
+</html>
