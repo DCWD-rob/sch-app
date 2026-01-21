@@ -1,220 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real Estate Tasks - Multi Job</title>
-<style>
-  body {
-    font-family: Arial;
-    padding: 10px;
-  
-  }
-
-  h3 {
-    margin-top: 20px;
-  }
-
-  input, select, button {
-    width: 100%;
-    padding: 10px;
-    margin: 6px 0;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    background: #fff;
-  }
-
-  td, th {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-  }
-
-  button {
-    background: #28a745;
-    color: white;
-    border: none;
-    margin-top: 10px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacey Curran Homes</title>
 </head>
 <body>
- <header>
-        <div class="header">
-    <a href="index.html" class="headerbox">home</a>
-    <a href="contact.html" class="headerbox">contacts</a>
-    <a href="agent_sales.html" class="headerbox">sales</a>
-    <a href="open_house.html" class="headerbox">open house</a>
-</div>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacey Curran Homes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-    </header>
-<h2>Real Estate Tasks - Multi Job</h2>
+<header>
+    <nav class="header">
+        <a href="index.html" class="headerbox">Home</a>
+        <a href="contact.html" class="headerbox">Contacts</a>
+        <a href="agent_sales.html" class="headerbox">Sales</a>
+        <a href="open_house.html" class="headerbox">Open House</a>
+    </nav>
+</header>
 
-<label for="jobSelect"><strong>Select Job / Client</strong></label>
-<select id="jobSelect"></select>
-<button id="newJobBtn">New Job</button>
+<main class="container">
 
-<h3>Client Info</h3>
-<input id="fname" placeholder="First name">
-<input id="lname" placeholder="Last name">
-<input id="address" placeholder="Address">
-<input id="phone" placeholder="Phone">
-<input id="email" placeholder="Email">
+  <h2>Real Estate Tasks</h2>
 
-<h3>Tasks</h3>
-<table>
-  <tr>
-    <th>Task</th>
-    <th>Status</th>
-  </tr>
-  <tbody id="tasks"></tbody>
-</table>
+  <label><strong>Select Job / Client</strong></label>
+  <div class="job-controls">
+    <select id="jobSelect"></select>
+    <button id="newJobBtn">New Job</button>
+  </div>
 
-<button id="saveBtn">Save Data</button>
-<p id="message"></p>
+  <h3>Client Info</h3>
+  <div class="form-grid">
+    <input id="fname" placeholder="First name">
+    <input id="lname" placeholder="Last name">
+    <input id="address" placeholder="Address">
+    <input id="phone" placeholder="Phone">
+    <input id="email" placeholder="Email">
+  </div>
 
-<script>
-const tasksList = [
-  "mandatory licenses consumer",
-  "MA-Exc buyers agency agreement",
-  "facts for consumers",
-  
-  "lender approval",
-  "deed",
-  "MLS Listing",
-  "contract to purchase Real estate",
-  "offer deposit",
-  "lead paint notice",
-  "MA standard P and S agreement",
-  "P and S deposit",
-  "MA notice of designated agency",
-  "TRID addendum",
-  
-  "sellers real estate info statement",
-  "closing documents",
-  "DA"
-];
+  <h3>Tasks</h3>
 
-const tasksBody = document.getElementById("tasks");
-const jobSelect = document.getElementById("jobSelect");
-const newJobBtn = document.getElementById("newJobBtn");
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="tasks"></tbody>
+    </table>
+  </div>
 
-let allJobs = JSON.parse(localStorage.getItem("allJobs")) || {};
-let currentJob = null;
+  <button id="saveBtn" class="primary">Save Data</button>
+  <p id="message"></p>
 
-// Populate job selector
-function populateJobSelector() {
-  jobSelect.innerHTML = "";
-  Object.keys(allJobs).forEach(jobName => {
-    const option = document.createElement("option");
-    option.value = jobName;
-    option.text = jobName;
-    jobSelect.add(option);
-  });
-}
-
-// Load job data
-function loadJob(jobName) {
-  currentJob = jobName;
-  const data = allJobs[jobName] || { tasks: {} };
-
-  document.getElementById("fname").value = data.fname || "";
-  document.getElementById("lname").value = data.lname || "";
-  document.getElementById("address").value = data.address || "";
-  document.getElementById("phone").value = data.phone || "";
-  document.getElementById("email").value = data.email || "";
-
-  // Populate tasks
-  tasksBody.innerHTML = "";
-  tasksList.forEach(task => {
-    const status = data.tasks[task] || "Not Completed";
-
-    const tr = document.createElement("tr");
-    const tdTask = document.createElement("td");
-    tdTask.textContent = task;
-
-    const tdSelect = document.createElement("td");
-    const select = document.createElement("select");
-
-    ["Not Completed", "Completed"].forEach(val => {
-      const option = document.createElement("option");
-      option.value = val;
-      option.text = val;
-      select.add(option);
-    });
-    select.value = status;
-
-    tdSelect.appendChild(select);
-    tr.appendChild(tdTask);
-    tr.appendChild(tdSelect);
-
-    tasksBody.appendChild(tr);
-  });
-}
-
-// Save current job
-function saveCurrentJob() {
-  if (!currentJob) return;
-
-  const dataToSave = {
-    fname: document.getElementById("fname").value,
-    lname: document.getElementById("lname").value,
-    address: document.getElementById("address").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    tasks: {}
-  };
-
-  document.querySelectorAll("#tasks tr").forEach(row => {
-    const task = row.children[0].textContent;
-    const status = row.children[1].children[0].value;
-    dataToSave.tasks[task] = status;
-  });
-
-  allJobs[currentJob] = dataToSave;
-  localStorage.setItem("allJobs", JSON.stringify(allJobs));
-  document.getElementById("message").innerText = "Saved ✔";
-}
-
-// Event: job selection change
-jobSelect.addEventListener("change", () => {
-  loadJob(jobSelect.value);
-  document.getElementById("message").innerText = "";
-});
-
-// Event: New Job
-newJobBtn.addEventListener("click", () => {
-  const newJobName = prompt("Enter new job/client name:");
-  if (!newJobName) return;
-  if (allJobs[newJobName]) {
-    alert("Job already exists!");
-    return;
-  }
-  allJobs[newJobName] = { tasks: {} };
-  localStorage.setItem("allJobs", JSON.stringify(allJobs));
-  populateJobSelector();
-  jobSelect.value = newJobName;
-  loadJob(newJobName);
-});
-
-// Event: Save button
-document.getElementById("saveBtn").addEventListener("click", saveCurrentJob);
-
-// Initialize
-populateJobSelector();
-if (Object.keys(allJobs).length > 0) {
-  const firstJob = Object.keys(allJobs)[0];
-  jobSelect.value = firstJob;
-  loadJob(firstJob);
-}
-</script>
+</main>
 
 </body>
-</html>
