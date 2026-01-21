@@ -21,12 +21,18 @@ h1, h2, h3 {
 ===================== */
 .header {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;          /* FORCE one row */
   justify-content: center;
-  gap: 20px;
+  gap: 0.5rem;
   padding: 0.75rem;
   background: #222;
+  overflow-x: auto;           /* allow sideways scroll */
 }
+
+.header::-webkit-scrollbar {
+  display: none;              /* hides scrollbar on mobile */
+}
+
 
 .headerbox {
   color: white;
