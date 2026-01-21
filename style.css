@@ -25,14 +25,14 @@ h1, h2, h3 {
   justify-content: center;
   gap: 0.3rem;
   padding: 0.75rem;
-  background: rgb(107, 77, 189);
+  background: #6b3370;
   overflow-x: auto;
 }
 
 .headerbox {
   color: white;
   text-decoration: none;
-  background: #1a121a;
+  background: #998099;
   padding: 0.6rem 1rem;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -103,7 +103,7 @@ input[type="submit"] {
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  background: #007bff;
+  background: #6b3370;;
   color: white;
 }
 
@@ -171,4 +171,6 @@ th {
   margin-right: auto;
   width: 50%;
 }
-
+p{
+    text-align: center;
+}
