@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Listing Details</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            margin: 0;
+            background: #f5f5f5;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        /* Responsive table wrapper */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        /* Photo grid */
+        .photo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .photo-grid img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 6px;
+            box-shadow: 0 0 4px rgba(0,0,0,0.2);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 600px) {
+            table {
+                font-size: 14px;
+            }
+
+            td strong {
+                display: block;
+                margin-bottom: 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Listing Details</h1>
+
+    <div id="content">Loading...</div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const mls = params.get("mls");
+
+        const fields = [
+            "PROP_TYPE","LIST_NO","LIST_AGENT","LIST_OFFICE","STATUS","LIST_PRICE",
+            "STREET_NO","STREET_NAME","UNIT_NO","TOWN_NUM","AREA","ZIP_CODE",
+            "LENDER_OWNED","REMARKS","PHOTO_COUNT","PHOTO_DATE","PHOTO_MASK",
+            "LISTING_ALERT","NEIGHBORHOOD","SF_TYPE","STYLE","LOT_SIZE","ACRE",
+            "SQUARE_FEET","GARAGE_SPACES","GARAGE_PARKING","BASEMENT","NO_ROOMS",
+            "NO_BEDROOMS","NO_FULL_BATHS","NO_HALF_BATHS","MASTER_BATH","LIV_LEVEL",
+            "LIV_DIMEN","LIV_DSCRP","DIN_LEVEL","DIN_DIMEN","DIN_DSCRP","FAM_LEVEL",
+            "FAM_DIMEN","FAM_DSCRP","KIT_LEVEL","KIT_DIMEN","KIT_DSCRP","MBR_LEVEL",
+            "MBR_DIMEN","MBR_DSCRP","BED2_LEVEL","BED2_DIMEN","BED2_DSCRP",
+            "BED3_LEVEL","BED3_DIMEN","BED3_DSCRP","BED4_LEVEL","BED4_DIMEN",
+            "BED4_DSCRP","BED5_LEVEL","BED5_DIMEN","BED5_DSCRP","BTH1_LEVEL",
+            "BTH1_DIMEN","BTH1_DSCRP","BTH2_LEVEL","BTH2_DIMEN","BTH2_DSCRP",
+            "BTH3_LEVEL","BTH3_DIMEN","BTH3_DSCRP","LAUNDRY_LEVEL","LAUNDRY_DIMEN",
+            "LAUNDRY_DSCRP","OTH1_ROOM_NAME","OTH1_LEVEL","OTH1_DIMEN","OTH1_DSCRP",
+            "OTH2_ROOM_NAME","OTH2_LEVEL","OTH2_DIMEN","OTH2_DSCRP","OTH3_ROOM_NAME",
+            "OTH3_LEVEL","OTH3_DIMEN","OTH3_DSCRP","OTH4_ROOM_NAME","OTH4_LEVEL",
+            "OTH4_DIMEN","OTH4_DSCRP","OTH5_ROOM_NAME","OTH5_LEVEL","OTH5_DIMEN",
+            "OTH5_DSCRP","OTH6_ROOM_NAME","OTH6_LEVEL","OTH6_DIMEN","OTH6_DSCRP",
+            "COUNTY","STATE","YEAR_BUILT","ASSESSMENTS","TAXES","TAX_YEAR",
+            "PARKING_FEATURE","NO_BATHS","YEAR_BUILT_DESCRP","CONSTRUCTION",
+            "ROOF_MATERIAL","COLOR","EXTERIOR_FEATURES","INTERIOR_FEATURES",
+            "FLOORING","LOT_DESCRIPTION","BASEMENT_FEATURE","ROAD_TYPE","HEAT_ZONES",
+            "HEATING","COOLING_ZONES","COOLING","ELECTRIC_FEATURE","WATER","SEWER",
+            "APPLIANCES","WATERFRONT_FLAG","WATERFRONT","WATERVIEW_FLAG",
+            "WATERVIEW_FEATURES","ADULT_COMMUNITY","SQUARE_FEET_INCL_BASE",
+            "SQUARE_FEET_DISCLOSURES","HOME_OWN_ASSOCIATION","FEE_INTERVAL",
+            "TOTAL_PARKING","SHORT_SALE_LENDER_APP_REQD","AboveGradeFinishedArea",
+            "BelowGradeFinishedArea","TITLE5","ADU"
+        ];
+
+        fetch("mls.json")
+            .then(r => r.json())
+            .then(data => {
+                const listing = Object.values(data).find(item => item.LIST_NO == mls);
+
+                if (!listing) {
+                    document.getElementById("content").innerHTML = "Listing not found.";
+                    return;
+                }
+
+                let html = `<h2>MLS #${listing.LIST_NO}</h2>`;
+
+                html += `<div class="table-wrapper"><table>`;
+
+                fields.forEach(field => {
+                    if (listing[field] !== undefined && listing[field] !== "") {
+                        html += `
+                            <tr>
+                                <td><strong>${field.replace(/_/g, " ")}</strong></td>
+                                <td>${listing[field]}</td>
+                            </tr>
+                        `;
+                    }
+                });
+
+                html += `</table></div>`;
+
+                html += `<h3>Photos</h3>`;
+                html += `<div class="photo-grid">`;
+
+                for (let i = 0; i < 40; i++) {
+                    const url = `http://media.mlspin.com/photo.aspx?mls=${listing.LIST_NO}&n=${i}&w=800&h=600`;
+
+                    html += `
+                        <img src="${url}" 
+                             onerror="this.style.display='none'">
+                    `;
+                }
+
+                html += `</div>`;
+
+                document.getElementById("content").innerHTML = html;
+            });
+    </script>
+</body>
+</html>

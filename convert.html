@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Import MLS Listings</title>
+
+    <style>
+        .header {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.75rem;
+  background: #6b3370;
+  overflow-x: auto;
+}
+
+.headerbox {
+  color: white;
+  text-decoration: none;
+  background: #998099;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.header::-webkit-scrollbar {
+  display: none;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+        }
+        h3{
+            text-align: center;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            background: #6c5281;
+            color: white;
+        }
+
+        button:disabled {
+            background: #999;
+        }
+
+        #nextStep button {
+            background: #28a745;
+        }
+
+        #nextStep button:last-child {
+            background: #dc3545;
+        }
+
+        .file-block {
+            background: #f8f8f8;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+        }
+
+        th {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <nav class="header">
+        <a href="index.html" class="headerbox">Home</a>
+        <a href="contact.html" class="headerbox">Contacts</a>
+        <a href="agent_sales.html" class="headerbox">Sales</a>
+        <a href="open_house.html" class="headerbox">Open House</a>
+         <a href="mlssearch.html" class="headerbox">Search Listings</a>
+        <a href="convert.html" class="headerbox">Import MLS listings to app</a>
+    </nav>
+    <h2>IMPORT MLS LISTINGS</h2>
+    <h3>1. Import all needed listing files<br></h3>
+    <h3>2. press submit MLS Listings to app </h3>
+    <button onclick="startImport()">Import MLS Listings</button>
+    <button onclick="exportJSON()" id="submitBtn" disabled>Submit MLS listings to App</button>
+
+    <div id="fileDisplay"></div>
+    <div id="nextStep"></div>
+
+    <script>
+
+        const DB_NAME = "MLS_APP";
+const STORE_NAME = "listings";
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+
+        req.onupgradeneeded = e => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, { autoIncrement: true });
+            }
+        };
+
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function saveListings(listings) {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+
+    listings.forEach(row => store.add(row));
+    return tx.complete;
+}
+
+async function loadListings() {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+
+    return new Promise(resolve => {
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+    });
+}
+
+async function clearListings() {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    tx.objectStore(STORE_NAME).clear();
+}
+
+        let allRows = [];
+        let fileCount = 0;
+
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = ".txt";
+
+        function startImport() {
+            allRows = [];
+            fileCount = 0;
+            document.getElementById("fileDisplay").innerHTML = "";
+            document.getElementById("nextStep").innerHTML = "";
+            document.getElementById("submitBtn").disabled = true;
+
+            selectFile();
+        }
+
+        function selectFile() {
+            fileInput.onchange = async () => {
+                const file = fileInput.files[0];
+                if (!file) return;
+
+                fileCount++;
+                document.getElementById("submitBtn").disabled = false;
+
+                const text = await file.text();
+                const rows = parseTxt(text);
+                allRows.push(...rows);
+
+                displayFile(file.name, rows);
+                showNextButtons();
+            };
+
+            fileInput.click();
+        }
+
+        function showNextButtons() {
+            document.getElementById("nextStep").innerHTML = `
+                <button onclick="selectFile()">YES — Import another file</button>
+                <button onclick="finishImport()">DONE — Finish importing</button>
+            `;
+        }
+
+        function finishImport() {
+            document.getElementById("nextStep").innerHTML = "";
+        }
+
+        function parseTxt(text) {
+            const lines = text.split(/\r?\n/).filter(l => l.trim());
+            if (lines.length === 0) return [];
+
+            const headers = lines[0].split("|");
+            const rows = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].split("|");
+                const obj = {};
+                headers.forEach((h, idx) => {
+                    obj[h] = cols[idx] || "";
+                });
+                rows.push(obj);
+            }
+
+            return rows;
+        }
+
+        function displayFile(filename, rows) {
+            const container = document.getElementById("fileDisplay");
+
+            let html = `
+                <div class="file-block">
+                    <h3>${filename}</h3>
+                    <p>Rows imported: ${rows.length}</p>
+                    <div class="table-wrapper">
+                        <table>
+            `;
+
+           
+
+            html += `
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML += html;
+        }
+
+        async function exportJSON() {
+    if (allRows.length === 0) {
+        alert("No data to save.");
+        return;
+    }
+
+    await clearListings();          // optional: overwrite previous import
+    await saveListings(allRows);
+
+    alert(`Saved ${allRows.length} MLS listings to this device.`);
+}
+window.addEventListener("load", async () => {
+    const saved = await loadListings();
+    if (saved.length) {
+        allRows = saved;
+        document.getElementById("submitBtn").disabled = false;
+        alert(`Loaded ${saved.length} saved MLS listings.`);
+    }
+});
+
+
+    </script>
+</body>
+</html>
