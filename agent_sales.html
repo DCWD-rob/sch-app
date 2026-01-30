@@ -15,14 +15,22 @@
 <body>
 
 <header>
-  <div class="header">
-    <a href="index.html" class="headerbox">home</a>
-    <a href="contact.html" class="headerbox">contacts</a>
-    <a href="agent_sales.html" class="headerbox">sales</a>
-    <a href="open_house.html" class="headerbox">open house</a>
-        <a href="mlssearch.html" class="headerbox">Search Listings</a>
-        <a href="convert.html" class="headerbox">Import MLS listings to app</a>
-  </div>
+  <nav class="mobile-nav">
+    <div class="nav-bar">
+        <span class="app-title">MLS App</span>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+
+  
+    <div id="menu" class="menu">
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contacts</a>
+        <a href="agent_sales.html">Sales</a>
+        <a href="open_house.html">Open House</a>
+        <a href="mlssearch.html">Search Listings</a>
+        <a href="convert.html">Import MLS</a>
+    </div>
+</nav>
 </header>
 
 <h2>Real Estate Tasks</h2>
@@ -266,6 +274,17 @@ saveBtn.addEventListener("click", saveCurrentJob);
 
 // Initialize
 populateJobSelector();
+function toggleMenu() {
+            const menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // Optional: auto-close after tap
+        document.querySelectorAll(".menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("menu").style.display = "none";
+            });
+        });
 </script>
 
 </body>

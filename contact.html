@@ -9,14 +9,22 @@
 <body>
 
 <header>
-    <nav class="header">
-        <a href="index.html" class="headerbox">Home</a>
-        <a href="contact.html" class="headerbox">Contacts</a>
-        <a href="agent_sales.html" class="headerbox">Sales</a>
-        <a href="open_house.html" class="headerbox">Open House</a>
-        <a href="mlssearch.html" class="headerbox">Search Listings</a>
-        <a href="convert.html" class="headerbox">Import MLS listings to app</a>
-    </nav>
+    <nav class="mobile-nav">
+    <div class="nav-bar">
+       
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+
+  
+    <div id="menu" class="menu">
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contacts</a>
+        <a href="agent_sales.html">Sales</a>
+        <a href="open_house.html">Open House</a>
+        <a href="mlssearch.html">Search Listings</a>
+        <a href="convert.html">Import MLS</a>
+    </div>
+</nav>
 </header>
 
 <h1>Phone Book</h1>
@@ -66,6 +74,11 @@
     <p id="email_output"></p>
 </div>
 
-<script src="contact.js"></script>
+<script src="contact.js">
+       
+      
+    
+
+</script>
 </body>
 </html>

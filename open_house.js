@@ -33,4 +33,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+    
+        function toggleMenu() {
+            const menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // Optional: auto-close after tap
+        document.querySelectorAll(".menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("menu").style.display = "none";
+            });
+        });
+   
+
+
 window.emailjs
+function toggleMenu() {
+            const menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // Optional: auto-close after tap
+        document.querySelectorAll(".menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("menu").style.display = "none";
+            });
+        });

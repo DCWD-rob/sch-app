@@ -22,24 +22,46 @@
 </head>
 <body id = "grad">
 
-    <nav class="header">
-        <a href="index.html" class="headerbox">Home</a>
-        <a href="contact.html" class="headerbox">Contacts</a>
-        <a href="agent_sales.html" class="headerbox">Sales</a>
-        <a href="open_house.html" class="headerbox">Open House</a>
-         <a href="mlssearch.html" class="headerbox">Search Listings</a>
-        <a href="convert.html" class="headerbox">Import MLS listings to app</a>
-        <a href="mlssearch.html" class="headerbox">Search Listings</a>
-        <a href="convert.html" class="headerbox">Import MLS listings to app</a>
-    </nav>
-</header>
+   <nav class="mobile-nav">
+    <div class="nav-bar">
+        <span class="app-title"></span>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+
+  
+    <div id="menu" class="menu">
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contacts</a>
+        <a href="agent_sales.html">Sales</a>
+        <a href="open_house.html">Open House</a>
+        <a href="mlssearch.html">Search Listings</a>
+        <a href="convert.html">Import MLS</a>
+    </div>
+</nav>
+
 <header><h1>Stacey Curran Homes</h1></header>
 <h2> Connecting great people with great homes</h2>
   <header>
 <img src = "logo.png" id = "logo">
+    <!-- your page content -->
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        // Optional: auto-close after tap
+        document.querySelectorAll(".menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("menu").style.display = "none";
+            });
+        });
+    </script>
+</body>
+</html>
+
 </body>
 </html>
 
     
-</body>
-</html>

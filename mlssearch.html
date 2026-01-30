@@ -28,6 +28,50 @@
 .header::-webkit-scrollbar {
   display: none;
 }
+.mobile-nav {
+    background: #6b3370;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+}
+
+.app-title {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.menu-btn {
+    font-size: 1.6rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.menu {
+    display: none;
+    background: #7d4a82;
+}
+
+.menu a {
+    display: block;
+    padding: 0.9rem 1rem;
+    color: white;
+    text-decoration: none;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.menu a:hover {
+    background: #998099;
+}
 
         body {
             font-family: Arial, sans-serif;
@@ -120,14 +164,22 @@
 
 <body>
     <header>
-  <div class="header">
-    <a href="index.html" class="headerbox">home</a>
-    <a href="contact.html" class="headerbox">contacts</a>
-    <a href="agent_sales.html" class="headerbox">sales</a>
-    <a href="open_house.html" class="headerbox">open house</a>
-        <a href="mlssearch.html" class="headerbox">Search Listings</a>
-        <a href="convert.html" class="headerbox">Import MLS listings to app</a>
-  </div>
+  <nav class="mobile-nav">
+    <div class="nav-bar">
+        <span class="app-title">MLS App</span>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+
+    <div id="menu" class="menu">
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contacts</a>
+        <a href="agent_sales.html">Sales</a>
+        <a href="open_house.html">Open House</a>
+        <a href="mlssearch.html">Search Listings</a>
+        <a href="convert.html">Import MLS</a>
+    </div>
+</nav>
+
 </header>
     <h1>MLS List</h1>
 
@@ -373,6 +425,27 @@
         function openListing(mls) {
             window.location.href = `details.html?mls=${mls}`;
         }
+            <!-- your page content -->
+
+ 
+     function toggleMenu() {
+    const menu = document.getElementById("menu");
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
+    } else {
+        menu.style.display = "block";
+    }
+}
+
+// Close menu when clicking a link
+document.querySelectorAll(".menu a").forEach(link => {
+    link.addEventListener("click", () => {
+        document.getElementById("menu").style.display = "none";
+    });
+});
+
+   
+
     </script>
 </body>
 </html>
