@@ -5,6 +5,9 @@
     <title>Import MLS Listings</title>
 
 <style>
+    .convert{
+        font-size: larger;
+    }
 /* Navbar container */
 .mobile-nav {
   background: #6b3370;
@@ -97,11 +100,11 @@
     <h2>IMPORT MLS LISTINGS</h2>
     <h3>1. Import all needed listing files<br></h3>
     <h3>2. press submit MLS Listings to app </h3>
-    <button onclick="startImport()">Import MLS Listings</button>
-    <button onclick="exportJSON()" id="submitBtn" disabled>Submit MLS listings to App</button>
+    <button class = "convert" onclick="startImport()">Import MLS Listings</button>
+    <button class="convert" onclick="exportJSON()" id="submitBtn" disabled>Submit MLS listings to App</button>
 <div id="fileDisplay"></div>
 <div id="nextStep"></div>
-<button onclick="exportJSON()" id="submitBtn" disabled>Submit MLS listings to App</button>
+<button class = "convert" onclick="exportJSON()" id="submitBtn" disabled>Submit MLS listings to App</button>
 
 
     <script>
