@@ -217,16 +217,14 @@
     </div>
 
     <div id="output" class="table-wrapper"></div>
+
 <script>
-/* -------------------------------
-   IndexedDB setup
--------------------------------- */
+/* -----------------------------
+   IndexedDB Setup
+----------------------------- */
 const DB_NAME = "MLS_APP";
 const STORE_NAME = "listings";
-let mlsData = {};
-let zipLookup = {};
 
-// Open or create IndexedDB
 function openDB() {
     return new Promise((resolve, reject) => {
         const req = indexedDB.open(DB_NAME, 1);
@@ -241,34 +239,58 @@ function openDB() {
     });
 }
 
-// Load all MLS listings from IndexedDB
-async function loadListings() {
-    const db = await openDB();
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const store = tx.objectStore(STORE_NAME);
-    return new Promise(resolve => {
-        const req = store.getAll();
-        req.onsuccess = () => resolve(req.result || []);
+function loadListings() {
+    return openDB().then(db => {
+        return new Promise(resolve => {
+            const tx = db.transaction(STORE_NAME, "readonly");
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.getAll();
+            req.onsuccess = () => resolve(req.result || []);
+        });
     });
 }
 
-// Load ZIP -> Town mapping
-async function loadZipcodes() {
-    const text = await fetch("zipcode.txt").then(r => r.text());
-    text.split(/\r?\n/).forEach(line => {
-        if (!line.trim()) return;
-        const [zip, town] = line.split("|");
-        zipLookup[zip.trim()] = town.trim();
-    });
-}
-
-/* -------------------------------
-   Render Table with Pagination
--------------------------------- */
+/* -----------------------------
+   Global Variables
+----------------------------- */
+let mlsData = {};      // key: LIST_NO or fallback
+let zipLookup = {};
 let currentPage = 1;
 let itemsPerPage = 20;
 let currentList = [];
 
+/* -----------------------------
+   Load ZIP codes + MLS listings
+----------------------------- */
+Promise.all([
+    fetch("zipcode.txt").then(r => r.text()),
+    loadListings() // load MLS listings from IndexedDB
+]).then(([zipText, savedListings]) => {
+    // Build ZIP → Town lookup
+    zipText.split(/\r?\n/).forEach(line => {
+        if (!line.trim()) return;
+        const [zip, town] = line.split("|");
+        zipLookup[zip.trim()] = town.trim();
+    });
+
+    // Convert array into object keyed by LIST_NO or fallback index
+    mlsData = {};
+    savedListings.forEach((item, idx) => {
+        const key = item.LIST_NO || `IDX_${idx}`; // fallback key
+        mlsData[key] = item;
+    });
+
+    // Render table immediately
+    if (Object.keys(mlsData).length) {
+        sortMLS_AZ();
+    } else {
+        document.getElementById("output").innerHTML = "<p>No MLS listings found. Import some first.</p>";
+    }
+});
+
+/* -----------------------------
+   Render Table + Pagination
+----------------------------- */
 function renderTable(items) {
     currentList = items;
     const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -278,18 +300,35 @@ function renderTable(items) {
     const end = start + itemsPerPage;
     const pageItems = items.slice(start, end);
 
+    if (!pageItems.length) {
+        document.getElementById("output").innerHTML = "<p>No listings match your criteria.</p>";
+        return;
+    }
+
     let html = `
         <table>
             <tr>
-                <th>Images</th><th>MLS</th><th>Price</th><th>Address</th>
-                <th>State</th><th>County</th><th>ZIP</th><th>Bedrooms</th>
-                <th>Bathrooms</th><th>Rooms</th><th>Sq Ft</th><th>Remarks</th>
+                <th>Images</th>
+                <th>MLS</th>
+                <th>Price</th>
+                <th>Address</th>
+                <th>State</th>
+                <th>County</th>
+                <th>ZIP</th>
+                <th>Bedrooms</th>
+                <th>Bathrooms</th>
+                <th>Rooms</th>
+                <th>Sq Ft</th>
+                <th>Remarks</th>
             </tr>
     `;
 
-    for (const item of pageItems) {
-        const mlsnum  = item.LIST_NO || "—";
-        const price   = item.LIST_PRICE || "—";
+    for (const key of pageItems) {
+        const item = mlsData[key];
+        if (!item) continue;
+
+        const mlsnum = item.LIST_NO || key;
+        const price = item.LIST_PRICE || "—";
         const cleanStreetName = String(item.STREET_NAME || "").replace(/\s+/g, " ").trim();
         const streetNo = item.STREET_NO || "";
         const zip = item.ZIP_CODE || "";
@@ -341,95 +380,101 @@ function renderTable(items) {
     document.getElementById("output").innerHTML = html;
 }
 
-/* Pagination controls */
+/* Pagination */
 function nextPage() { currentPage++; renderTable(currentList); }
 function prevPage() { currentPage--; renderTable(currentList); }
 
-/* -------------------------------
+/* -----------------------------
    Sorting + Filtering
--------------------------------- */
+----------------------------- */
 function sortMLS_AZ() {
     currentPage = 1;
-    renderTable(Object.values(mlsData).sort((a,b)=> (a.LIST_NO||"").localeCompare(b.LIST_NO||"")));
+    renderTable(Object.keys(mlsData).sort());
 }
+
 function sortMLS_ZA() {
     currentPage = 1;
-    renderTable(Object.values(mlsData).sort((a,b)=> (b.LIST_NO||"").localeCompare(a.LIST_NO||"")));
+    renderTable(Object.keys(mlsData).sort().reverse());
 }
+
 function sortTownAZ() {
     currentPage = 1;
-    renderTable(Object.values(mlsData).sort((a,b) => {
-        const townA = (zipLookup[a.ZIP_CODE] || "").toLowerCase();
-        const townB = (zipLookup[b.ZIP_CODE] || "").toLowerCase();
+    const sorted = Object.keys(mlsData).sort((a, b) => {
+        const townA = (zipLookup[mlsData[a]?.ZIP_CODE] || "").toLowerCase();
+        const townB = (zipLookup[mlsData[b]?.ZIP_CODE] || "").toLowerCase();
         return townA.localeCompare(townB);
-    }));
+    });
+    renderTable(sorted);
 }
+
 function sortTownZA() {
     currentPage = 1;
-    renderTable(Object.values(mlsData).sort((a,b) => {
-        const townA = (zipLookup[a.ZIP_CODE] || "").toLowerCase();
-        const townB = (zipLookup[b.ZIP_CODE] || "").toLowerCase();
+    const sorted = Object.keys(mlsData).sort((a, b) => {
+        const townA = (zipLookup[mlsData[a]?.ZIP_CODE] || "").toLowerCase();
+        const townB = (zipLookup[mlsData[b]?.ZIP_CODE] || "").toLowerCase();
         return townB.localeCompare(townA);
-    }));
+    });
+    renderTable(sorted);
 }
+
 function PriceHigh() {
     currentPage = 1;
-    renderTable(Object.values(mlsData).sort((a,b)=> (parseFloat(b.LIST_PRICE)||0) - (parseFloat(a.LIST_PRICE)||0)));
+    const sorted = Object.keys(mlsData).sort((a, b) => {
+        return (parseFloat(mlsData[b].LIST_PRICE) || 0) - (parseFloat(mlsData[a].LIST_PRICE) || 0);
+    });
+    renderTable(sorted);
 }
+
 function PriceLow() {
     currentPage = 1;
-    renderTable(Object.values(mlsData).sort((a,b)=> (parseFloat(a.LIST_PRICE)||0) - (parseFloat(b.LIST_PRICE)||0)));
+    const sorted = Object.keys(mlsData).sort((a, b) => {
+        return (parseFloat(mlsData[a].LIST_PRICE) || 0) - (parseFloat(mlsData[b].LIST_PRICE) || 0);
+    });
+    renderTable(sorted);
 }
+
 function handleCounty() {
     currentPage = 1;
     const county = document.getElementById("countySelect").value;
     if (!county) return sortMLS_AZ();
-    const filtered = Object.values(mlsData).filter(item => item.COUNTY === county);
+
+    const filtered = Object.keys(mlsData).filter(key => mlsData[key]?.COUNTY === county);
     renderTable(filtered);
 }
+
 function searchRemarks() {
     currentPage = 1;
     const keyword = document.getElementById("remarkSearch").value.toLowerCase();
     if (!keyword.trim()) return sortMLS_AZ();
-    const filtered = Object.values(mlsData).filter(item => (item.REMARKS||"").toLowerCase().includes(keyword));
+
+    const filtered = Object.keys(mlsData).filter(key => {
+        return (mlsData[key]?.REMARKS || "").toLowerCase().includes(keyword);
+    });
+
     renderTable(filtered);
 }
 
-/* -------------------------------
-   Open MLS details
--------------------------------- */
+/* -----------------------------
+   Open Listing
+----------------------------- */
 function openListing(mls) {
     window.location.href = `details.html?mls=${mls}`;
 }
 
-/* -------------------------------
-   Hamburger menu
--------------------------------- */
+/* -----------------------------
+   Mobile Menu Toggle
+----------------------------- */
 function toggleMenu() {
     const menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 document.querySelectorAll(".menu a").forEach(link => {
-    link.addEventListener("click", () => menu.style.display = "none");
-});
-
-/* -------------------------------
-   On page load: load DB + ZIPs
--------------------------------- */
-window.addEventListener("load", async () => {
-    await loadZipcodes();
-    const saved = await loadListings();
-    if (saved.length) {
-        mlsData = {};
-        saved.forEach(item => { if(item.LIST_NO) mlsData[item.LIST_NO] = item; });
-        console.log(`Loaded ${saved.length} MLS listings from IndexedDB`);
-        sortMLS_AZ();
-    } else {
-        console.log("No MLS listings found in IndexedDB");
-        renderTable([]);
-    }
+    link.addEventListener("click", () => {
+        document.getElementById("menu").style.display = "none";
+    });
 });
 </script>
+
 
 </body>
 </html>
