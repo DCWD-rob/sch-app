@@ -4,169 +4,14 @@
     <meta charset="UTF-8">
     <title>MLS</title>
 
-    <style>
-        .header {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
-  gap: 0.3rem;
-  padding: 0.75rem;
-  background: #6b3370;
-  overflow-x: auto;
-}
-
-.headerbox {
-  color: white;
-  text-decoration: none;
-  background: #998099;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-.header::-webkit-scrollbar {
-  display: none;
-}
-.mobile-nav {
-    background: #6b3370;
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.nav-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1rem;
-}
-
-.app-title {
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-.menu-btn {
-    font-size: 1.6rem;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
-
-.menu {
-    display: none;
-    background: #7d4a82;
-}
-
-.menu a {
-    display: block;
-    padding: 0.9rem 1rem;
-    color: white;
-    text-decoration: none;
-    border-top: 1px solid rgba(255,255,255,0.2);
-}
-
-.menu a:hover {
-    background: #998099;
-}
-
-        body {
-            font-family: Arial, sans-serif;
-            padding: 10px;
-            margin: 0;
-            background: #f5f5f5;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        /* Filter bar */
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-            justify-content: center;
-        }
-
-        select, input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            width: 100%;
-            max-width: 250px;
-        }
-
-        /* Responsive table wrapper */
-        .table-wrapper {
-            overflow-x: auto;
-            background: white;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            font-size: 14px;
-            vertical-align: top;
-        }
-
-        th {
-            background: #eee;
-        }
-
-        img {
-            border-radius: 4px;
-        }
-
-        /* Pagination buttons */
-        .pagination {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .pagination button {
-            padding: 10px 18px;
-            margin: 0 5px;
-            font-size: 16px;
-            border-radius: 6px;
-            border: none;
-            background: #0078ff;
-            color: white;
-        }
-
-        .pagination button:disabled {
-            background: #999;
-        }
-
-        @media (max-width: 600px) {
-            th, td {
-                font-size: 13px;
-                padding: 6px;
-            }
-        }
-    </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <header>
   <nav class="mobile-nav">
     <div class="nav-bar">
-        <span class="app-title">Stacey Curran Homes</span>
+        <span class="app-title">MLS App</span>
         <button class="menu-btn" onclick="toggleMenu()">☰</button>
     </div>
 
@@ -184,12 +29,22 @@
    <iframe 
     src="https://staceycurranhomes.com/mls_search_shell.php" 
     width="100%" 
-    height="1500" 
+    height="800" 
     style="border:0;">
 </iframe>
 
+ <script>
+        function toggleMenu() {
+            const menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
 
+        // Optional: auto-close after tap
+        document.querySelectorAll(".menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("menu").style.display = "none";
+            });
+        });
+    </script>
 </body>
 </html>
-
-
