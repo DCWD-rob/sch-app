@@ -32,10 +32,23 @@
     height="1500" 
     style="border:0;">
 </iframe>
+<script>
+        function toggleMenu() {
+            const menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
 
+        // Optional: auto-close after tap
+        document.querySelectorAll(".menu a").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("menu").style.display = "none";
+            });
+        });
+    </script>
 
 </body>
 </html>
+
 
 
 
