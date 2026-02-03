@@ -261,22 +261,36 @@ th {
 /* =========================================
    IFRAME (FULL SCREEN UNDER HEADER)
 ========================================= */
+/* =========================================
+   LAYOUT FIX FOR IFRAME PAGES
+========================================= */
 
-/* Ensure viewport math works */
 html,
 body {
   height: 100%;
+  margin: 0;
 }
 
-/* Page wrapper for iframe pages */
+/* Make page a vertical layout */
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header stays natural height */
+.app-header {
+  flex-shrink: 0;
+}
+
+/* Main area fills remaining space */
 .page-content.iframe-page {
+  flex: 1;
   padding: 0;
   margin: 0;
-  height: calc(var(--vh, 1vh) * 100 - 70px); /* header height */
   overflow: hidden;
 }
 
-/* MLS iframe */
+/* Iframe fills main completely */
 .mls-iframe {
   width: 100%;
   height: 100%;
