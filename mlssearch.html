@@ -1,64 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>MLS</title>
+  <meta charset="UTF-8">
+  <title>MLS Search</title>
 
   <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <header>
-  <nav class="mobile-nav">
-    <div class="nav-bar">
-        <span class="app-title">Stacey Curran Homes App</span>
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    </div>
 
-    <div id="menu" class="menu">
+  <!-- Unified Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">Stacey Curran Homes</div>
+
+      <button class="menu-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="contact.html">Contacts</a>
         <a href="agent_sales.html">Sales</a>
         <a href="open_house.html">Open House</a>
-        <a href="mlssearch.html">Search Listings</a>
-      
+        <a href="mlssearch.html" class="active">Search Listings</a>
+       
+      </nav>
     </div>
-</nav>
+  </header>
 
-</header>
-   <iframe 
-    src="https://staceycurranhomes.com/app_mls_search_shell.php" 
-    width="100%" 
-    height="1200" 
-    style="border:0;">
-</iframe>
-<script>
-        function toggleMenu() {
-            const menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
+  <!-- Main Content -->
+  <main class="page-content">
+    <iframe 
+      src="https://staceycurranhomes.com/app_mls_search_shell.php"
+      width="100%"
+      height="1200"
+      style="border:0;">
+    </iframe>
+  </main>
 
-        // Optional: auto-close after tap
-        document.querySelectorAll(".menu a").forEach(link => {
-            link.addEventListener("click", () => {
-                document.getElementById("menu").style.display = "none";
-            });
-        });
-    </script>
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".nav-links");
+
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("show");
+    });
+  </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

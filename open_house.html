@@ -1,62 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCH Sign In</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open House Sign‑In</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
 
-<header>
-    <nav class="mobile-nav">
-    <div class="nav-bar">
-        <span class="app-title">Stacey Curran Homes</span>
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    </div>
+  <!-- Unified Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">Stacey Curran Homes</div>
 
-  
-    <div id="menu" class="menu">
+      <button class="menu-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="contact.html">Contacts</a>
         <a href="agent_sales.html">Sales</a>
-        <a href="open_house.html">Open House</a>
+        <a href="open_house.html" class="active">Open House</a>
         <a href="mlssearch.html">Search Listings</a>
-
+     
+      </nav>
     </div>
-</nav>
+  </header>
 
-</header>
+  <!-- Page Content -->
+  <main class="page-content">
+    <div class="container">
+      <h1 class="page-title">Open House Sign‑In</h1>
+      <p class="page-subtitle">Welcome! Please sign in below.</p>
 
-<main class="container">
+      <form id="signInForm" class="form-card">
+        <label for="fname">First Name</label>
+        <input type="text" id="fname" name="fname" required>
 
-    <h1>Stacey Curran Homes</h1>
-    <h2>Open House Sign In Sheet</h2>
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
 
-    <div id="openHouse">
-        <form id="signInForm" class="sign-in-form">
-            <label for="fname">First name</label>
-            <input type="text" id="fname" name="fname" required>
+        <button type="submit" class="btn-primary">Submit</button>
+      </form>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-
-            <button type="submit">Submit</button>
-        </form>
-
-        <p id="fdname"></p>
+      <p id="fdname" class="success-message"></p>
     </div>
+  </main>
 
-</main>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init("0QvLx2yuvBvzkzWlG");
+  </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-  emailjs.init("0QvLx2yuvBvzkzWlG");
-</script>
-<script src="open_house.js"></script>
+  <script src="open_house.js"></script>
+
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".nav-links");
+
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("show");
+    });
+  </script>
 
 </body>
 </html>
-
-
-

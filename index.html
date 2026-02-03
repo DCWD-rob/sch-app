@@ -1,72 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- iOS PWA support -->
-<link rel="apple-touch-icon" href="logo.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SCH">
+  <!-- iOS PWA support -->
+  <link rel="apple-touch-icon" href="logo.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SCH">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stacey Curran Homes</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stacey Curran Homes</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stacey Curran Homes</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body id = "grad">
 
-   <nav class="mobile-nav">
-    <div class="nav-bar">
-        <span class="app-title"></span>
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+<body id="grad">
+  <!-- Unified Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">Stacey Curran Homes</div>
+
+      <button class="menu-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav-links">
+        
+        <a href="home.html" class="active">Home</a>
+        <a href="mlssearch.html">Search Homes</a>
+        <a href="aboutme.html">About Me</a>
+        <a href="contact.html">Contact Us</a>
+   
+      </nav>
     </div>
+  </header>
 
-  
-    <div id="menu" class="menu">
-        <a href="index.html">Home</a>
-        <a href="contact.html">Contacts</a>
-        <a href="agent_sales.html">Sales</a>
-        <a href="open_house.html">Open House</a>
-        <a href="mlssearch.html">Search Listings</a>
-<!--        <a href="convert.html">Import MLS</a>-->
-    </div>
-</nav>
+  <!-- Main Content -->
+  <main class="page-content home-hero">
+    <section class="hero-card">
+      <img src="logo.png" alt="Stacey Curran Homes logo" class="hero-logo">
 
-<header><h1>Stacey Curran Homes</h1></header>
-<h2> Connecting great people with great homes</h2>
-  <header>
-<img src = "logo.png" id = "logo">
-    <!-- your page content -->
+      <h1>Stacey Curran Homes</h1>
+      <h2>Connecting great people with great homes</h2>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
+      <p>
+        Search homes, schedule showings, and connect directly with a local expert—
+        all from one simple, mobile‑friendly app.
+      </p>
 
-        // Optional: auto-close after tap
-        document.querySelectorAll(".menu a").forEach(link => {
-            link.addEventListener("click", () => {
-                document.getElementById("menu").style.display = "none";
-            });
-        });
-    </script>
+      <div class="hero-actions">
+        <a href="mls_search_shell.php" class="btn-primary">Search Listings</a>
+        <a href="consultation.php" class="btn-secondary">Free Consultation</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".nav-links");
+
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("show");
+    });
+  </script>
 </body>
 </html>
-
-</body>
-</html>
-
-    
-
-
-
-
-

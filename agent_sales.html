@@ -1,294 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real Estate Tasks</title>
-<style>
-  /* Hide sections by default */
-  #clientInfo, #tasksSection, #saveBtn, #clientHeading, #tasksHeading {
-    display: none;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Estate Tasks</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
+
+  <style>
+    /* Hide sections by default */
+    #clientInfo, #tasksSection, #saveBtn, #clientHeading, #tasksHeading {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-  <nav class="mobile-nav">
-    <div class="nav-bar">
-        <span class="app-title">Stacey Curran Homes</span>
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    </div>
+  <!-- Unified Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">Stacey Curran Homes</div>
 
-  
-    <div id="menu" class="menu">
+      <button class="menu-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="contact.html">Contacts</a>
-        <a href="agent_sales.html">Sales</a>
+        <a href="agent_sales.html" class="active">Sales</a>
         <a href="open_house.html">Open House</a>
-            <a href="mlssearch.html">Search Listings</a>
+        <a href="mlssearch.html">Search Listings</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="page-content">
+    <div class="container">
+
+      <h1 class="page-title">Real Estate Tasks</h1>
+
+      <label for="jobSelect"><strong>Select Job / Client</strong></label>
+      <select id="jobSelect"></select>
+
+      <h3 id="clientHeading">Client Info</h3>
+      <div id="clientInfo" class="form-grid">
+        <input id="fname" placeholder="First name">
+        <input id="lname" placeholder="Last name">
+        <input id="address" placeholder="Address">
+        <input id="phone" placeholder="Phone">
+        <input id="email" placeholder="Email">
+      </div>
+
+      <h3 id="tasksHeading">Tasks</h3>
+      <div id="tasksSection" class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tasks"></tbody>
+        </table>
+      </div>
+
+      <p id="message" class="success-message"></p>
+
+      <button id="saveBtn" class="btn-primary">Save Data</button>
 
     </div>
-</nav>
-</header>
+  </main>
 
-<h2>Real Estate Tasks</h2>
+  <!-- Script -->
+  <script>
+    const tasksList = [
+      "mandatory licenses consumer",
+      "MA-Exc buyers agency agreement",
+      "facts for consumers",
+      "lender approval",
+      "deed",
+      "MLS Listing",
+      "contract to purchase Real estate",
+      "offer deposit",
+      "lead paint notice",
+      "MA standard P and S agreement",
+      "P and S deposit",
+      "MA notice of designated agency",
+      "TRID addendum",
+      "sellers real estate info statement",
+      "closing documents",
+      "DA"
+    ];
 
-<label for="jobSelect"><strong>Select Job / Client</strong></label>
-<select id="jobSelect"></select>
+    const tasksBody = document.getElementById("tasks");
+    const jobSelect = document.getElementById("jobSelect");
+    const clientInfo = document.getElementById("clientInfo");
+    const tasksSection = document.getElementById("tasksSection");
+    const saveBtn = document.getElementById("saveBtn");
+    const clientHeading = document.getElementById("clientHeading");
+    const tasksHeading = document.getElementById("tasksHeading");
 
-<h3 id="clientHeading">Client Info</h3>
-<div id="clientInfo">
-  <input id="fname" placeholder="First name">
-  <input id="lname" placeholder="Last name">
-  <input id="address" placeholder="Address">
-  <input id="phone" placeholder="Phone">
-  <input id="email" placeholder="Email">
-</div>
+    let allJobs = JSON.parse(localStorage.getItem("allJobs")) || {};
 
-<h3 id="tasksHeading">Tasks</h3>
-<div id="tasksSection">
-  <table>
-    <thead>
-      <tr>
-        <th>Task</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="tasks"></tbody>
-  </table>
-</div>
-<p id="message"></p>
-<button id="saveBtn">Save Data</button>
+    // Seed default jobs if empty
+    if (Object.keys(allJobs).length === 0) {
+      allJobs = {
+        "Mort": { fname: "Mort", lname: "Smith", address: "123 Main St", phone: "555-1234", email: "mort@example.com", tasks: {} },
+        "Tator": { fname: "Tator", lname: "Jones", address: "456 Oak St", phone: "555-5678", email: "tator@example.com", tasks: {} }
+      };
+      localStorage.setItem("allJobs", JSON.stringify(allJobs));
+    }
 
+    let currentJob = null;
 
-<script>
-const tasksList = [
-  "mandatory licenses consumer",
-  "MA-Exc buyers agency agreement",
-  "facts for consumers",
-  "lender approval",
-  "deed",
-  "MLS Listing",
-  "contract to purchase Real estate",
-  "offer deposit",
-  "lead paint notice",
-  "MA standard P and S agreement",
-  "P and S deposit",
-  "MA notice of designated agency",
-  "TRID addendum",
-  "sellers real estate info statement",
-  "closing documents",
-  "DA"
-];
+    function showSections() {
+      clientInfo.style.display = "grid";
+      tasksSection.style.display = "block";
+      saveBtn.style.display = "inline-block";
+      clientHeading.style.display = "block";
+      tasksHeading.style.display = "block";
+    }
 
-const tasksBody = document.getElementById("tasks");
-const jobSelect = document.getElementById("jobSelect");
-const clientInfo = document.getElementById("clientInfo");
-const tasksSection = document.getElementById("tasksSection");
-const saveBtn = document.getElementById("saveBtn");
-const clientHeading = document.getElementById("clientHeading");
-const tasksHeading = document.getElementById("tasksHeading");
+    function hideSections() {
+      clientInfo.style.display = "none";
+      tasksSection.style.display = "none";
+      saveBtn.style.display = "none";
+      clientHeading.style.display = "none";
+      tasksHeading.style.display = "none";
+    }
 
-let allJobs = JSON.parse(localStorage.getItem("allJobs")) || {};
+    function populateJobSelector() {
+      jobSelect.innerHTML = "";
 
-// Seed pre-existing jobs if empty
-if (Object.keys(allJobs).length === 0) {
-  allJobs = {
-    "Mort": { fname: "Mort", lname: "Smith", address: "123 Main St", phone: "555-1234", email: "mort@example.com", tasks: {} },
-    "Tator": { fname: "Tator", lname: "Jones", address: "456 Oak St", phone: "555-5678", email: "tator@example.com", tasks: {} }
-  };
-  localStorage.setItem("allJobs", JSON.stringify(allJobs));
-}
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "-- Select Job / Client --";
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      jobSelect.appendChild(placeholder);
 
-let currentJob = null;
+      Object.keys(allJobs).forEach(jobName => {
+        const option = document.createElement("option");
+        option.value = jobName;
+        option.textContent = jobName;
+        jobSelect.appendChild(option);
+      });
 
-function showSections() {
-  clientInfo.style.display = "block";
-  tasksSection.style.display = "block";
-  saveBtn.style.display = "inline-block";
-  clientHeading.style.display = "block";
-  tasksHeading.style.display = "block";
-}
+      const createNewOption = document.createElement("option");
+      createNewOption.value = "__create_new__";
+      createNewOption.textContent = "-- Create New Job --";
+      jobSelect.appendChild(createNewOption);
 
-function hideSections() {
-  clientInfo.style.display = "none";
-  tasksSection.style.display = "none";
-  saveBtn.style.display = "none";
-  clientHeading.style.display = "none";
-  tasksHeading.style.display = "none";
-}
+      hideSections();
+    }
 
-function populateJobSelector() {
-  jobSelect.innerHTML = "";
+    function loadJob(jobName) {
+      if (!jobName || !allJobs[jobName]) return;
 
-  // Placeholder first
-  const placeholder = document.createElement("option");
-  placeholder.value = "";
-  placeholder.textContent = "-- Select Job / Client --";
-  placeholder.disabled = true;
-  placeholder.selected = true;
-  jobSelect.appendChild(placeholder);
+      currentJob = jobName;
+      const data = allJobs[jobName];
 
-  // Existing jobs
-  Object.keys(allJobs).forEach(jobName => {
-    const option = document.createElement("option");
-    option.value = jobName;
-    option.textContent = jobName;
-    jobSelect.appendChild(option);
-  });
+      document.getElementById("fname").value = data.fname || "";
+      document.getElementById("lname").value = data.lname || "";
+      document.getElementById("address").value = data.address || "";
+      document.getElementById("phone").value = data.phone || "";
+      document.getElementById("email").value = data.email || "";
 
-  // Create new job at bottom
-  const createNewOption = document.createElement("option");
-  createNewOption.value = "__create_new__";
-  createNewOption.textContent = "-- Create New Job --";
-  jobSelect.appendChild(createNewOption);
+      tasksBody.innerHTML = "";
+      tasksList.forEach(task => {
+        const status = data.tasks[task] || "Not Completed";
+        const tr = document.createElement("tr");
 
-  hideSections();
-}
+        const tdTask = document.createElement("td");
+        tdTask.textContent = task;
 
-function loadJob(jobName) {
-  if (!jobName || !allJobs[jobName]) return;
-
-  currentJob = jobName;
-  const data = allJobs[jobName];
-
-  document.getElementById("fname").value = data.fname || "";
-  document.getElementById("lname").value = data.lname || "";
-  document.getElementById("address").value = data.address || "";
-  document.getElementById("phone").value = data.phone || "";
-  document.getElementById("email").value = data.email || "";
-
-  // Populate tasks table
-  tasksBody.innerHTML = "";
-  tasksList.forEach(task => {
-    const status = data.tasks[task] || "Not Completed";
-    const tr = document.createElement("tr");
-
-    const tdTask = document.createElement("td");
-    tdTask.textContent = task;
-
-    const tdStatus = document.createElement("td");
-    const select = document.createElement("select");
-    ["Not Completed", "Completed"].forEach(val => {
-      const option = document.createElement("option");
-      option.value = val;
-      option.textContent = val;
-      select.appendChild(option);
-    });
-    select.value = status;
-    tdStatus.appendChild(select);
-
-    tr.appendChild(tdTask);
-    tr.appendChild(tdStatus);
-    tasksBody.appendChild(tr);
-  });
-
-  showSections();
-}
-
-function createNewJob() {
-  const newJobName = prompt("Enter new job/client name:");
-  if (!newJobName) return;
-  if (allJobs[newJobName]) {
-    alert("Job already exists!");
-    return;
-  }
-
-  // Add empty job
-  allJobs[newJobName] = { fname: "", lname: "", address: "", phone: "", email: "", tasks: {} };
-  localStorage.setItem("allJobs", JSON.stringify(allJobs));
-
-  populateJobSelector();
-  jobSelect.value = newJobName;
-  currentJob = newJobName;
-
-  // Clear form
-  document.getElementById("fname").value = "";
-  document.getElementById("lname").value = "";
-  document.getElementById("address").value = "";
-  document.getElementById("phone").value = "";
-  document.getElementById("email").value = "";
-
-  tasksBody.innerHTML = "";
-  tasksList.forEach(task => {
-    const tr = document.createElement("tr");
-    const tdTask = document.createElement("td");
-    tdTask.textContent = task;
-
-    const tdStatus = document.createElement("td");
-    const select = document.createElement("select");
-    ["Not Completed", "Completed"].forEach(val => {
-      const option = document.createElement("option");
-      option.value = val;
-      option.textContent = val;
-      select.appendChild(option);
-    });
-    tdStatus.appendChild(select);
-
-    tr.appendChild(tdTask);
-    tr.appendChild(tdStatus);
-    tasksBody.appendChild(tr);
-  });
-
-  showSections();
-}
-
-function saveCurrentJob() {
-  if (!currentJob) return;
-
-  const data = {
-    fname: document.getElementById("fname").value,
-    lname: document.getElementById("lname").value,
-    address: document.getElementById("address").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    tasks: {}
-  };
-
-  document.querySelectorAll("#tasks tr").forEach(row => {
-    const task = row.children[0].textContent;
-    const status = row.children[1].children[0].value;
-    data.tasks[task] = status;
-  });
-
-  allJobs[currentJob] = data;
-  localStorage.setItem("allJobs", JSON.stringify(allJobs));
-  document.getElementById("message").textContent = "Saved ✔";
-}
-
-// Dropdown change
-jobSelect.addEventListener("change", () => {
-  const selected = jobSelect.value;
-  if (selected === "__create_new__") {
-    createNewJob();
-  } else {
-    loadJob(selected);
-  }
-  document.getElementById("message").textContent = "";
-});
-
-// Save button
-saveBtn.addEventListener("click", saveCurrentJob);
-
-// Initialize
-populateJobSelector();
-function toggleMenu() {
-            const menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
-
-        // Optional: auto-close after tap
-        document.querySelectorAll(".menu a").forEach(link => {
-            link.addEventListener("click", () => {
-                document.getElementById("menu").style.display = "none";
-            });
+        const tdStatus = document.createElement("td");
+        const select = document.createElement("select");
+        ["Not Completed", "Completed"].forEach(val => {
+          const option = document.createElement("option");
+          option.value = val;
+          option.textContent = val;
+          select.appendChild(option);
         });
-</script>
+        select.value = status;
+        tdStatus.appendChild(select);
+
+        tr.appendChild(tdTask);
+        tr.appendChild(tdStatus);
+        tasksBody.appendChild(tr);
+      });
+
+      showSections();
+    }
+
+    function createNewJob() {
+      const newJobName = prompt("Enter new job/client name:");
+      if (!newJobName) return;
+      if (allJobs[newJobName]) {
+        alert("Job already exists!");
+        return;
+      }
+
+      allJobs[newJobName] = { fname: "", lname: "", address: "", phone: "", email: "", tasks: {} };
+      localStorage.setItem("allJobs", JSON.stringify(allJobs));
+
+      populateJobSelector();
+      jobSelect.value = newJobName;
+      currentJob = newJobName;
+
+      tasksBody.innerHTML = "";
+      tasksList.forEach(task => {
+        const tr = document.createElement("tr");
+        const tdTask = document.createElement("td");
+        tdTask.textContent = task;
+
+        const tdStatus = document.createElement("td");
+        const select = document.createElement("select");
+        ["Not Completed", "Completed"].forEach(val => {
+          const option = document.createElement("option");
+          option.value = val;
+          option.textContent = val;
+          select.appendChild(option);
+        });
+        tdStatus.appendChild(select);
+
+        tr.appendChild(tdTask);
+        tr.appendChild(tdStatus);
+        tasksBody.appendChild(tr);
+      });
+
+      showSections();
+    }
+
+    function saveCurrentJob() {
+      if (!currentJob) return;
+
+      const data = {
+        fname: document.getElementById("fname").value,
+        lname: document.getElementById("lname").value,
+        address: document.getElementById("address").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        tasks: {}
+      };
+
+      document.querySelectorAll("#tasks tr").forEach(row => {
+        const task = row.children[0].textContent;
+        const status = row.children[1].children[0].value;
+        data.tasks[task] = status;
+      });
+
+      allJobs[currentJob] = data;
+      localStorage.setItem("allJobs", JSON.stringify(allJobs));
+      document.getElementById("message").textContent = "Saved ✔";
+    }
+
+    jobSelect.addEventListener("change", () => {
+      const selected = jobSelect.value;
+      if (selected === "__create_new__") {
+        createNewJob();
+      } else {
+        loadJob(selected);
+      }
+      document.getElementById("message").textContent = "";
+    });
+
+    saveBtn.addEventListener("click", saveCurrentJob);
+
+    populateJobSelector();
+
+    // New unified menu toggle
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".nav-links");
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("show");
+    });
+  </script>
 
 </body>
 </html>
-
-
-

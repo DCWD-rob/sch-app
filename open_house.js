@@ -1,6 +1,6 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-    // Wait until EmailJS is actually available
+    // Wait until EmailJS is available
     function waitForEmailJS(callback) {
         if (typeof emailjs !== "undefined") {
             callback();
@@ -13,7 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
     waitForEmailJS(() => {
         console.log("EmailJS loaded");
 
-        document.getElementById("signInForm").addEventListener("submit", function(e) {
+        const form = document.getElementById("signInForm");
+        const message = document.getElementById("fdname");
+
+        form.addEventListener("submit", (e) => {
             e.preventDefault();
 
             const params = {
@@ -23,40 +26,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             emailjs.send("service_3awecfe", "template_95kc0y7", params)
                 .then(() => {
-                    document.getElementById("fdname").textContent =
-                        "Thanks for signing in, " + params.fname;
+                    message.textContent = `Thanks for signing in, ${params.fname}`;
+                    form.reset();
                 })
                 .catch((error) => {
-                    console.log("EmailJS Error:", error);
+                    console.error("EmailJS Error:", error);
+                    message.textContent = "There was an issue sending your sign‑in. Please try again.";
                 });
         });
     });
 
 });
-    
-        function toggleMenu() {
-            const menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
-
-        // Optional: auto-close after tap
-        document.querySelectorAll(".menu a").forEach(link => {
-            link.addEventListener("click", () => {
-                document.getElementById("menu").style.display = "none";
-            });
-        });
-   
-
-
-window.emailjs
-function toggleMenu() {
-            const menu = document.getElementById("menu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
-        }
-
-        // Optional: auto-close after tap
-        document.querySelectorAll(".menu a").forEach(link => {
-            link.addEventListener("click", () => {
-                document.getElementById("menu").style.display = "none";
-            });
-        });

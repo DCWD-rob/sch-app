@@ -1,85 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phone Book</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone Book</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
 
-<header>
-    <nav class="mobile-nav">
-    <div class="nav-bar">
-       
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    </div>
+  <!-- Unified Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">Stacey Curran Homes</div>
 
-  
-    <div id="menu" class="menu">
+      <button class="menu-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav-links">
         <a href="index.html">Home</a>
-        <a href="contact.html">Contacts</a>
+        <a href="contact.html" class="active">Contacts</a>
         <a href="agent_sales.html">Sales</a>
         <a href="open_house.html">Open House</a>
         <a href="mlssearch.html">Search Listings</a>
-  <!--      <a href="convert.html">Import MLS</a>-->
+        
+      </nav>
     </div>
-</nav>
-</header>
+  </header>
 
-<h1>Phone Book</h1>
+  <!-- Page Content -->
+  <main class="page-content">
+    <h1 class="page-title">Phone Book</h1>
 
-<div id="allContacts_output"></div>
+    <div id="allContacts_output" class="container"></div>
 
-<form id="contactForm">
-    <p>Fill out form to add a new contact</p>
-    <p>or click show all to display contacts</p>
+    <div class="container">
+      <form id="contactForm">
+        <p class="form-intro">
+          Fill out the form to add a new contact, or tap “Show All Contacts”.
+        </p>
 
-    <label>
-        First Name
-        <input id="fname" type="text">
-    </label>
+        <label>
+          First Name
+          <input id="fname" type="text">
+        </label>
 
-    <label>
-        Last Name
-        <input id="lname" type="text">
-    </label>
+        <label>
+          Last Name
+          <input id="lname" type="text">
+        </label>
 
-    <label>
-        Address
-        <input id="address" type="text">
-    </label>
+        <label>
+          Address
+          <input id="address" type="text">
+        </label>
 
-    <label>
-        Phone
-        <input id="phone" type="tel">
-    </label>
+        <label>
+          Phone
+          <input id="phone" type="tel">
+        </label>
 
-    <label>
-        Email
-        <input id="email" type="email">
-    </label>
+        <label>
+          Email
+          <input id="email" type="email">
+        </label>
 
-    <div class="button-group">
-        <button id="myButton" type="button">Save Contact</button>
-        <button id="loadButton" type="button">Show All Contacts</button>
+        <div class="button-group">
+          <button id="myButton" type="button" class="btn-primary">Save Contact</button>
+          <button id="loadButton" type="button" class="btn-secondary">Show All Contacts</button>
+        </div>
+      </form>
     </div>
-</form>
 
-<div id="output">
-    <p id="fname_output"></p>
-    <p id="lname_output"></p>
-    <p id="address_output"></p>
-    <p id="phone_output"></p>
-    <p id="email_output"></p>
-</div>
+    <div id="output" class="container">
+      <p id="fname_output"></p>
+      <p id="lname_output"></p>
+      <p id="address_output"></p>
+      <p id="phone_output"></p>
+      <p id="email_output"></p>
+    </div>
+  </main>
 
-<script src="contact.js">
-       
-      
-    
+  <script src="contact.js"></script>
 
-</script>
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".nav-links");
+
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("show");
+    });
+  </script>
+
 </body>
 </html>
-
