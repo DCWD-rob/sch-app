@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open House Sign-In</title>
+
+  <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
+
+  <style>
+    /* --- RESET & FULLSCREEN SETUP --- */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* --- HEADER --- */
+    .app-header {
+      background: #6b3370;
+      color: #fff;
+      padding: 0.75rem 1rem;
+      flex-shrink: 0; /* header keeps its natural height */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a.active {
+      background: #998099;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.7rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        background: #4a1f4e;
+        padding: 1rem;
+        border-radius: 8px;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+    }
+
+    /* --- IFRAME FULLSCREEN --- */
+    main {
+      flex: 1;
+      width: 100%;
+      display: flex;
+    }
+
+    iframe {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="logo">Stacey Curran Homes</div>
+    <button class="menu-toggle"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="contact.html">Contacts</a>
+      <a href="agent_sales.html">Sales</a>
+      <a href="open_house.html" class="active">Open House</a>
+      <a href="mlssearch.html">Search Listings</a>
+    </nav>
+  </header>
+
+  <!-- MAIN IFRAME -->
+  <main>
+    <iframe src="https://staceycurranhomes.com/aboutme.html"></iframe>
+  </main>
+
+  <!-- JS -->
+  <script>
+    // Mobile menu toggle
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".nav-links");
+    toggle.addEventListener("click", () => nav.classList.toggle("show"));
+  </script>
+
+</body>
+</html>
