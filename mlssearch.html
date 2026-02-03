@@ -87,19 +87,20 @@
     }
 
     /* --- IFRAME FULLSCREEN --- */
-    main {
+  main {
   flex: 1;
   display: flex;
-  justify-content: center; /* center horizontally */
-  align-items: center;     /* center vertically */
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  min-height: 0;           /* IMPORTANT FIX */
 }
 
 iframe {
-  width: 80vw;   /* 80% of viewport width */
-  height: 80vh;  /* 80% of viewport height */
+  width: 80vw;
+  height: 80vh;
   border: none;
-  border-radius: 8px; /* optional, looks nicer */
 }
+
 
   </style>
 </head>
@@ -134,6 +135,7 @@ iframe {
 
 </body>
 </html>
+
 
 
 
