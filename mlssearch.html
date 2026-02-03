@@ -7,6 +7,48 @@
 
   <link rel="stylesheet" href="style.css">
   <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
+  
+  <style>
+    /* FULLSCREEN FLEX LAYOUT FOR IFRAME */
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      flex-shrink: 0; /* header takes natural height */
+    }
+
+    .page-content.iframe-page {
+      flex: 1;           /* main takes remaining space */
+      display: flex;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .iframe-container {
+      flex: 1;           /* container fills main */
+      display: flex;
+      width: 100%;
+    }
+
+    .mls-iframe {
+      flex: 1;           /* iframe fills container */
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
 </head>
 
 <body>
@@ -30,13 +72,15 @@
     </div>
   </header>
 
+  <!-- Main content with fullscreen iframe -->
   <main class="page-content iframe-page">
-  <iframe
-    src="https://staceycurranhomes.com/app_mls_search_shell.php"
-    class="mls-iframe">
-  </iframe>
-</main>
-
+    <div class="iframe-container">
+      <iframe
+        src="https://staceycurranhomes.com/app_mls_search_shell.php"
+        class="mls-iframe">
+      </iframe>
+    </div>
+  </main>
 
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -46,18 +90,6 @@
 
   <!-- Mobile menu toggle -->
   <script>
-
-  function setVh() {
-    document.documentElement.style.setProperty(
-      "--vh",
-      `${window.innerHeight * 0.01}px`
-    );
-  }
-
-  setVh();
-  window.addEventListener("resize", setVh);
-
-
     const toggle = document.querySelector(".menu-toggle");
     const nav = document.querySelector(".nav-links");
 

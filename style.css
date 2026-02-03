@@ -259,32 +259,32 @@ th {
   gap: 1rem;
 }
 /* =========================================
-   IFRAME (FULL SCREEN UNDER HEADER)
-========================================= */
-/* =========================================
-   LAYOUT FIX FOR IFRAME PAGES
+   FORCE FULLSCREEN IFRAME LAYOUT
 ========================================= */
 
 html,
 body {
+  width: 100%;
   height: 100%;
   margin: 0;
 }
 
-/* Make page a vertical layout */
+/* Make the whole page a vertical layout */
 body {
   display: flex;
   flex-direction: column;
 }
 
-/* Header stays natural height */
+/* Header takes only what it needs */
 .app-header {
   flex-shrink: 0;
 }
 
-/* Main area fills remaining space */
+/* Main fills ALL remaining space */
 .page-content.iframe-page {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -292,7 +292,7 @@ body {
 
 /* Iframe fills main completely */
 .mls-iframe {
-  width: 100%;
+  width: 100vw;
   height: 100%;
   border: none;
   display: block;
