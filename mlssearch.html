@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +8,14 @@
 
   <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
 
+  <link rel="stylesheet" href="style.css">
+
   <style>
     /* RESET */
     html, body {
-      height: 100%;
       margin: 0;
       padding: 0;
+      height: 100%;
     }
 
     body {
@@ -89,14 +92,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 0; /* critical for flexbox */
+      min-height: 0;
+      padding-top: 20px;
     }
 
-    /* IFRAME */
     iframe {
-      width: 80vw;
-      height: 80vh;
+      width: 90vw;
+      height: 170vh;
       border: none;
+      
     }
   </style>
 </head>
@@ -116,7 +120,9 @@
   </header>
 
   <main>
-    <iframe src="https://staceycurranhomes.com/app_mls_search_shell.php"></iframe>
+  
+
+   <iframe src="https://staceycurranhomes.com/app_mls_search_shell.php"></iframe>
   </main>
 
   <script>
