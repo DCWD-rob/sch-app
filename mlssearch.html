@@ -10,6 +10,29 @@
  
   <style>
     /* --- RESET & FULLSCREEN SETUP --- */
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  min-height: 0;           /* allows shrinking for centering */
+}
+
+iframe {
+  width: 80vw;
+  height: 80vh;
+  border: none;
+}
 
 
     body {
@@ -130,6 +153,7 @@ iframe {
 
 </body>
 </html>
+
 
 
 
