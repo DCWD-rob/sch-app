@@ -1,0 +1,250 @@
+/* ===== Reset and Base ===== */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  background: url("img/bgimage.jpg") no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+}
+
+/* ===== Header ===== */
+header {
+  height: 200px;
+  background-color: rgb(107, 77, 189);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+#logo {
+  margin: 0;
+}
+
+#links a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+/* ===== Home Page Main Content ===== */
+.main-centered {
+  text-align: center;
+  margin: 40px auto;
+}
+
+.main-centered .main-img {
+  width: 330px;  /* increased by 10% */
+  height: auto;
+  border: 5px solid rgb(107, 77, 189); /* match header purple */
+  border-radius: 12px;
+}
+
+.body-title,
+.sublogo {
+  font-family: "Brush Script MT", cursive;
+  text-shadow: 1px 1px 3px rgb(107, 77, 189); /* match header purple */
+}
+
+.body-title {
+  font-size: 3.2rem;
+  margin-top: 15px;
+}
+
+.sublogo {
+  font-size: 2.5rem;
+  margin-top: 8px;
+}
+#home_description {
+  color: rgb(253, 248, 253);
+  font-weight: bold;
+  width: 70%;
+  margin: 0 auto;   /* centers the whole block */
+  text-align: center; /* centers the text inside */
+}
+
+
+
+.recent_sales{
+  color: rgb(107, 77, 189); /* match header purple */
+  text-align: center;
+  font-size:30px;
+}
+/* ===== Carousel ===== */
+.caption {
+  display: block;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #333;
+  margin-top: 6px;
+  max-width: 220px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+.list-wrapper {
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto;
+  max-width: 90%;
+  height: 300px; 
+  min-height: 300px;
+  border: 5px rgb(107, 77, 189) solid;
+
+}
+.item {
+  display: inline-block;
+  text-align: center;
+  padding: 10px;
+}
+
+.list {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+
+
+}
+
+
+
+
+.list .item img {
+  width: 220px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto;
+}
+
+
+
+
+
+.button {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  background: rgba(107, 77, 189, 0.9);
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.button--previous { left: 10px; }
+.button--next { right: 10px; }
+
+/* ===== About Me Section ===== */
+.bio-background {
+  padding: 40px 20px;
+}
+
+.bio-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+.bioimage {
+  width: 280px;   /* keep consistent */
+  height: 350px;  /* normalize height across all bios */
+  object-fit: cover; /* crop if needed but keep proportions */
+  border: 5px solid rgb(107, 77, 189);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.bio-copy {
+  flex: 1;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  text-shadow: 1px 1px 3px rgb(107, 77, 189);
+  max-width: calc(100% - 320px);
+}
+
+/* ===== Contact Form ===== */
+.contact-form {
+  background-color: rgb(107, 77, 189);
+  border-radius: 10px;
+  width: 60%;
+  height: 150%;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+
+
+/* ===== Footer ===== */
+footer {
+  background-color: rgb(107, 77, 189);
+  color: white;
+  padding: 30px 20px;
+  margin-top: auto;
+}
+
+.footer-container {
+  display: grid;
+  gap: 20px;
+  text-align: center;
+  justify-items: center;
+  align-items: start;
+}
+
+.footer-container.three-col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.footer-block p,
+.footer-block a {
+  margin: 5px 0;
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.footer-container a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .footer-container.three-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .bio-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .bioimage {
+    width: 250px;
+    height: 300px;  /* smaller normalized height for mobile */
+    margin-bottom: 15px;
+  }
+
+  .bio-copy {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+
+
+
