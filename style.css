@@ -5,6 +5,23 @@
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
+/* Force MLS listing cards to stack vertically */
+.listing-card,
+.property,
+.mls-item {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+}
+
+/* Make images full-width */
+.listing-card img,
+.property img,
+.mls-item img {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+}
 
 
 .mobile-nav {
@@ -219,4 +236,5 @@ th {
 }
 p{
     text-align: center;
+
 }
