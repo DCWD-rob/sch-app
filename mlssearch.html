@@ -12,20 +12,20 @@
     /* --- RESET & FULLSCREEN SETUP --- */
 html, body {
   height: 100%;
+  margin: 0;
 }
 
 body {
   display: flex;
   flex-direction: column;
-
 }
 
 main {
   flex: 1;
   display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
-
+  justify-content: center;
+  align-items: center;
+  min-height: 0;
 }
 
 iframe {
@@ -34,12 +34,7 @@ iframe {
   border: none;
 }
 
-
-    body {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+    
 
     /* --- HEADER --- */
     .app-header {
@@ -153,6 +148,7 @@ iframe {
 
 </body>
 </html>
+
 
 
 
