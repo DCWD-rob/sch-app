@@ -12,7 +12,7 @@
       "type": "image/png"
     },
     {
-      "src": "logo.png",
+      "src": "applogo.png",
       "sizes": "96x96",
       "type": "image/png"
     },
@@ -33,3 +33,4 @@
     }
   ]
 }
+
