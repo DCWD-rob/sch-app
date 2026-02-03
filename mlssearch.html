@@ -7,53 +7,25 @@
 
   <script src="https://kit.fontawesome.com/0aacbb7f3b.js" crossorigin="anonymous"></script>
 
- 
   <style>
-    /* --- RESET & FULLSCREEN SETUP --- */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+    /* RESET */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  display: flex;
-  flex-direction: column;
-}
+    body {
+      display: flex;
+      flex-direction: column;
+    }
 
-.app-header {
-  background: #6b3370;
-  color: #fff;
-  padding: 0.75rem 1rem;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-main {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 70px); /* header height compensation */
-}
-
-
-iframe {
-  width: 80vw;
-  height: calc(80vh - 20px); /* prevents header overlap */
-  border: none;
-}
-
-
-
-    /* --- HEADER --- */
+    /* HEADER */
     .app-header {
       background: #6b3370;
       color: #fff;
       padding: 0.75rem 1rem;
-      flex-shrink: 0; /* header keeps its natural height */
+      flex-shrink: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -111,53 +83,26 @@ iframe {
       }
     }
 
-    /* --- IFRAME FULLSCREEN --- */
-/* RESET */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+    /* MAIN AREA */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 0; /* critical for flexbox */
+    }
 
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-/* HEADER */
-.app-header {
-  background: #6b3370;
-  color: #fff;
-  padding: 0.75rem 1rem;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* MAIN AREA */
-main {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 0;
-}
-
-/* IFRAME */
-iframe {
-  width: 80vw;
-  height: 80vh;
-  border: none;
-}
-
-
+    /* IFRAME */
+    iframe {
+      width: 80vw;
+      height: 80vh;
+      border: none;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
   <header class="app-header">
     <div class="logo">Stacey Curran Homes</div>
     <button class="menu-toggle"><i class="fa-solid fa-bars"></i></button>
@@ -170,14 +115,11 @@ iframe {
     </nav>
   </header>
 
-  <!-- MAIN IFRAME -->
   <main>
     <iframe src="https://staceycurranhomes.com/app_mls_search_shell.php"></iframe>
   </main>
 
-  <!-- JS -->
   <script>
-    // Mobile menu toggle
     const toggle = document.querySelector(".menu-toggle");
     const nav = document.querySelector(".nav-links");
     toggle.addEventListener("click", () => nav.classList.toggle("show"));
@@ -185,19 +127,3 @@ iframe {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
