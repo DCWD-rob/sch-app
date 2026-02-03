@@ -7,7 +7,7 @@
   "theme_color": "#6a0dad",
   "icons": [
     {
-      "src": "applogo.png",
+      "src": "applogo1.png",
       "sizes": "72x72",
       "type": "image/png"
     },
@@ -33,6 +33,7 @@
     }
   ]
 }
+
 
 
 
