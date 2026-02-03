@@ -267,3 +267,36 @@ iframe {
   height: 85vh;
   border: none;
 }
+
+
+/* Force one listing per row on mobile */
+@media (max-width: 768px) {
+    .listing,
+    .property,
+    .result,
+    .listing-card,
+    .mls-item,
+    .property-card,
+    .home-card,
+    .search-result {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* Make images full width */
+    .listing img,
+    .property img,
+    .result img,
+    .listing-card img,
+    .mls-item img,
+    .property-card img,
+    .home-card img,
+    .search-result img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        border-radius: 8px;
+    }
+}
