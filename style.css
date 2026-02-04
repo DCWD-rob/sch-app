@@ -39,7 +39,7 @@ h1, h2, h3 {
 .app-header {
   background: var(--purple);
   color: var(--white);
-  padding: 0.75rem 1rem;
+  padding: 0.1rem 1rem;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -297,3 +297,4 @@ body {
   border: none;
   display: block;
 }  
+
