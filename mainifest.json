@@ -7,22 +7,22 @@
   "theme_color": "#6a0dad",
   "icons": [
     {
-      "src": "applogo2-72.png",
+      "src": "applogo1-72.png",
       "sizes": "72x72",
       "type": "image/png"
     },
     {
-      "src": "applogo2-96.png",
+      "src": "applogo1-96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "applogo2-128.png",
+      "src": "applogo1-128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "applogo2-192.png",
+      "src": "applogo1-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
@@ -33,3 +33,4 @@
     }
   ]
 }
+
