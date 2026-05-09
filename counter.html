@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Notes</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            margin: 0;
+            background: #b18ba7;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        input, textarea {
+            width: 100%;
+            max-width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .note-card {
+            border: 2px solid #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background: #fafafa;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #notesContainer {
+            border: 2px solid black;
+            padding: 15px;
+            margin-top: 20px;
+            width: 100%;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f8f8f8;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>My Notes</h1>
+
+    <label>Title:</label>
+    <input id="title">
+
+    <br><br>
+
+    <label>Note:</label>
+    <textarea id="note" rows="4"></textarea>
+<label>Color:</label>
+<select id="noteColor">
+    <option value="yellow">Yellow</option>
+    <option value="lightblue">Blue</option>
+    <option value="lightgreen">Green</option>
+</select>
+<br><br>
+
+    <button onclick="saveNote()">Save Note</button>
+
+    <h2>Saved Notes</h2><button onclick="showNotes()">Show All Notes</button>
+<br><br>
+
+    <div id="notesContainer"></div>
+
+    <script src="index.js" defer></script>
+</body>
+</html>
